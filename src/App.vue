@@ -1,6 +1,6 @@
 <template>
   <v-app>
-    
+
   </v-app>
 </template>
 
@@ -9,8 +9,6 @@
 export default {
   name: 'App',
 
-  data: () => ({
-    //
-  }),
+ 
 };
 </script>
