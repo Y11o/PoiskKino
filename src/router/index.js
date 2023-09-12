@@ -1,16 +1,27 @@
-import Vue from 'vue'
-import VueRouter from 'vue-router'
+import Vue from "vue";
+import VueRouter from "vue-router";
+import FilmsList from "@/pages/FilmsList.vue"
+import Favourites from "@/pages/Favourites.vue"
 
-Vue.use(VueRouter)
+Vue.use(VueRouter);
 
 const routes = [
-  {}
-]
+  {
+    path: "/",
+    name: "FilmsList",
+    component: FilmsList,
+  },
+  {
+    path: "/saved",
+    name: "Favourites",
+    component: Favourites,
+  },
+];
 
 const router = new VueRouter({
-  mode: 'history',
+  mode: "history",
   base: process.env.BASE_URL,
-  routes
-})
+  routes,
+});
 
-export default router
+export default router;
