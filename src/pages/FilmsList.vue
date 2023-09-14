@@ -1,10 +1,12 @@
 <template>
   <v-container>
-    <Film 
+    <v-row>
+      <Film 
         v-for="film in films" 
         :film="film" 
         :key="film.id" 
-    />
+      />
+    </v-row>
   </v-container>
 </template>
 
@@ -18,7 +20,7 @@ export default {
     films: [],
   }),
   mounted() {
-    
+    //this.axios.get();
   },
 };
 </script>
