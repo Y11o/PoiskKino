@@ -1,25 +1,21 @@
 <template>
   <v-col cols="4">
-    <v-card>
-        <v-card-title>{{film.title}}</v-card-title>
-        <v-card-text>
-            <v-img
-                width="200"
-                height="400"
-                :src="film.url"
-            />
-        </v-card-text>
+    <v-card width="900" height="600">
+      <v-card-title>{{film.nameEn}}</v-card-title>
+      <v-card-text>
+        <v-img :src="film.posterUrl" />
+      </v-card-text>
     </v-card>
   </v-col>
 </template>
 
 <script>
 export default {
-    props:{
-        film: {
-            type: Object,
-            required: true,
-        },
+  props: {
+    film: {
+      type: Object,
+      required: true,
     },
+  },
 };
 </script>
