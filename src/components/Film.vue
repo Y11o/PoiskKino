@@ -1,20 +1,40 @@
 <template>
-  <v-col cols="4">
-    <v-card width="900" height="600">
-      <v-card-title>{{film.nameEn}}</v-card-title>
-      <v-card-text>
-        <v-img :src="film.posterUrl" />
-      </v-card-text>
-    </v-card>
+  <v-col cols="3">
+    <v-hover>
+      <template v-slot:default="{ hover }">
+        <v-card
+          height="100%"
+          width="100%"
+          class="elevation-0 pa-0"
+          @click="showMore"
+        >
+          <v-card-text>
+            <v-img :src="film.posterUrl" />
+          </v-card-text>
+          <v-fade-transition>
+            <v-overlay v-if="hover" absolute color="#1976d2" z-index="3">
+            </v-overlay>
+          </v-fade-transition>
+        </v-card>
+      </template>
+    </v-hover>
   </v-col>
 </template>
 
 <script>
 export default {
+  data: () => ({
+    overlay: false,
+  }),
   props: {
     film: {
       type: Object,
       required: true,
+    },
+  },
+  methods: {
+    showMore() {
+      this.$emit("showMore", this.film);
     },
   },
 };

@@ -1,6 +1,6 @@
 <template>
   <v-container fluid>
-    <v-app-bar app color="primary" dark dense>
+    <v-app-bar app color="primary" dark dense hide-on-scroll>
       <v-toolbar-title class="flex text-center">
         <h2>POISK KINO</h2>
       </v-toolbar-title>
