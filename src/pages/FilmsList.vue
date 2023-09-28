@@ -15,7 +15,11 @@
         @showMore="showMore"
       />
     </v-row>
-    <FilmDialog :film="showFilm" v-model="dialogVisible" />
+    <FilmDialog
+      :film="showFilm"
+      v-model="dialogVisible"
+      @goToFilmPage="goToFilmPage"
+    />
     <div class="text-center">
       <v-pagination
         v-model="currentPage"
@@ -32,6 +36,7 @@
 import Film from "@/components/Film.vue";
 import FilmDialog from "@/components/FilmDialog.vue";
 import axios from "axios";
+
 export default {
   components: {
     Film,
@@ -43,10 +48,17 @@ export default {
     dialogVisible: false,
     currentPage: 1,
   }),
-  mounted() {
+  beforeMount() {
     this.fetchFilms();
   },
   methods: {
+    goToFilmPage(filmId) {
+      this.$router.push({
+        path: "/film",
+        params: { filmId: filmId },
+        query: { id: filmId },
+      });
+    },
     handlePageChange(value) {
       this.currentPage = value;
       this.fetchFilms();

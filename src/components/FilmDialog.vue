@@ -10,6 +10,9 @@
       <v-card-text>
         <v-img :src="film.posterUrl" />
         Year: {{ film.year }} Kinopoisk: {{ film.rating }}
+        <v-btn rounded color="primary" dark @click="goToFilmPage">
+          Подробнее
+        </v-btn>
       </v-card-text>
     </v-card>
   </v-dialog>
@@ -39,6 +42,11 @@ export default {
     },
     dialogVisible(newValue) {
       this.$emit("input", newValue);
+    },
+  },
+  methods: {
+    goToFilmPage() {
+      this.$emit("goToFilmPage", this.film.filmId);
     },
   },
 };
