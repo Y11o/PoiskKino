@@ -4,8 +4,10 @@ import filmsModule from "@/store/filmsModule.js";
 
 Vue.use(Vuex);
 
-export default new Vuex.Store({
-  modules:{
+const store = new Vuex.Store({
+  modules: {
     filmsModule,
   },
 });
+
+export default store;

@@ -11,7 +11,7 @@
         <v-img :src="film.posterUrl" />
         Year: {{ film.year }} Kinopoisk: {{ film.rating }}
         <v-btn rounded color="primary" dark @click="goToFilmPage">
-          Подробнее
+          На страницу фильма
         </v-btn>
       </v-card-text>
     </v-card>
