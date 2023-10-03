@@ -1,32 +1,21 @@
 <template>
   <v-container fluid>
     <v-pagination
-      v-model="currentPage"
-      :length="13"
-      :total-visible="7"
+      v-model="pageSelected"
+      :length="totalFilmListPages"
+      :total-visible="Math.ceil(totalFilmListPages / 2)"
       circle
-      @input="handlePageChange"
     ></v-pagination>
     <v-row class="flex" align="center">
-      <Film
-        v-for="film in films"
-        :film="film"
-        :key="film.id"
-        @showMore="showMore"
-      />
+      <Film v-for="film in films" :film="film" :key="film.id" />
     </v-row>
-    <FilmDialog
-      :film="showFilm"
-      v-model="dialogVisible"
-      @goToFilmPage="goToFilmPage"
-    />
+    <FilmDialog />
     <div class="text-center">
       <v-pagination
-        v-model="currentPage"
-        :length="13"
-        :total-visible="7"
+        v-model="pageSelected"
+        :length="totalFilmListPages"
+        :total-visible="Math.ceil(totalFilmListPages / 2)"
         circle
-        @input="handlePageChange"
       ></v-pagination>
     </div>
   </v-container>
@@ -35,52 +24,38 @@
 <script>
 import Film from "@/components/Film.vue";
 import FilmDialog from "@/components/FilmDialog.vue";
-import axios from "axios";
+import { mapActions, mapMutations, mapState } from "vuex";
 
 export default {
   components: {
     Film,
     FilmDialog,
   },
-  data: () => ({
-    films: [],
-    showFilm: {},
-    dialogVisible: false,
-    currentPage: 1,
-  }),
-  beforeMount() {
+  created() {
     this.fetchFilms();
   },
   methods: {
-    goToFilmPage(filmId) {
-      this.$router.push({
-        path: "/film",
-        params: { filmId: filmId },
-        query: { id: filmId },
-      });
-    },
-    handlePageChange(value) {
-      this.currentPage = value;
-      this.fetchFilms();
-    },
-    async fetchFilms() {
-      const response = await axios.get(
-        "https://kinopoiskapiunofficial.tech/api/v2.2/films/top",
-        {
-          params: {
-            page: this.currentPage,
-          },
-          headers: {
-            "X-API-KEY": "5a083dfc-2af6-456d-bc14-2f6adbae7052",
-            "Content-Type": "application/json",
-          },
-        }
-      );
-      this.films = response.data.films;
-    },
-    showMore(film) {
-      this.showFilm = film;
-      this.dialogVisible = true;
+    ...mapActions("films", {
+      fetchFilms: "fetchFilms",
+    }),
+    ...mapMutations("films", {
+      changePage: "changePage",
+    }),
+  },
+  computed: {
+    ...mapState("films", {
+      films: (state) => state.films,
+      currentPage: (state) => state.currentPage,
+      totalFilmListPages: (state) => state.totalFilmListPages,
+    }),
+    pageSelected: {
+      get() {
+        return this.currentPage;
+      },
+      set(newValue){
+        this.changePage(newValue);
+        this.fetchFilms();
+      },
     },
   },
 };

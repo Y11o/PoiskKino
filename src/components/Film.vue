@@ -22,6 +22,8 @@
 </template>
 
 <script>
+import { mapMutations } from "vuex";
+
 export default {
   data: () => ({
     overlay: false,
@@ -33,8 +35,13 @@ export default {
     },
   },
   methods: {
+    ...mapMutations('films', {
+      setShowFilm: "setShowFilm",
+      showFilmDialog: "showFilmDialog",
+    }),
     showMore() {
-      this.$emit("showMore", this.film);
+      this.setShowFilm(this.film);
+      this.showFilmDialog();
     },
   },
 };

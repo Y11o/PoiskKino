@@ -6,24 +6,18 @@ export default {
     dialogVisible: false,
     currentPage: 1,
     showFilm: {},
+    totalFilmListPages: 1,
   },
   getters: {
-    getFilms(state) {
-      return state.films;
-    },
-    getDialogVisible(state) {
-      return state.dialogVisible;
-    },
-    getShowFilm(state) {
-      return state.showFilm;
-    },
-    getCurrentPage(state) {
-      return state.currentPage;
-    },
+    getFilms: (state) => state.films,
+    getDialogVisible: (state) => state.dialogVisible,
+    getShowFilm: (state) => state.showFilm,
+    getCurrentPage: (state) => state.currentPage,
+    getTotalFilmListPages: (state) => state.totalFilmListPages,
   },
   mutations: {
-    setFilms(state, payload) {
-      state.films = payload;
+    setFilms(state, response) {
+      state.films = response;
     },
     showFilmDialog(state) {
       state.dialogVisible = true;
@@ -37,15 +31,17 @@ export default {
     setShowFilm(state, payload) {
       state.showFilm = payload;
     },
+    setTotalFilmListPages(state, payload) {
+      state.totalFilmListPages = payload;
+    },
   },
   actions: {
-    fetchFilms(context, {commit, state}) {
-      console.log(state);
-      const response = axios.get(
+    async fetchFilms(context) {
+      const response = await axios.get(
         "https://kinopoiskapiunofficial.tech/api/v2.2/films/top",
         {
           params: {
-            page: state.currentPage,
+            page: context.state.currentPage,
           },
           headers: {
             "X-API-KEY": "5a083dfc-2af6-456d-bc14-2f6adbae7052",
@@ -53,7 +49,9 @@ export default {
           },
         }
       );
+      context.commit("setTotalFilmListPages", response.data.pagesCount);
       context.commit("setFilms", response.data.films);
     },
   },
+  namespaced: true,
 };
