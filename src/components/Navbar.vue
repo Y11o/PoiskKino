@@ -1,9 +1,15 @@
 <template>
   <v-container fluid>
     <v-app-bar app color="primary" dark dense hide-on-scroll>
+      <v-app-bar-nav-icon></v-app-bar-nav-icon>
       <v-toolbar-title class="flex text-center">
         <h2>POISK KINO</h2>
       </v-toolbar-title>
+      <v-icon>mdi-lightbulb-on</v-icon>
+      <v-icon>mdi-lightbulb-outline</v-icon>
+      <v-btn icon>
+        <v-icon>mdi-magnify</v-icon>
+      </v-btn>
       <template v-slot:extension>
         <v-tabs fixed-tabs show-arrows>
           <v-tab to="/"> Главная </v-tab>
