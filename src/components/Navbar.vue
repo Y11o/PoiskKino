@@ -5,10 +5,11 @@
       <v-toolbar-title class="flex text-center">
         <h2>POISK KINO</h2>
       </v-toolbar-title>
-      <v-icon>mdi-lightbulb-on</v-icon>
-      <v-icon>mdi-lightbulb-outline</v-icon>
       <v-btn icon>
-        <v-icon>mdi-magnify</v-icon>
+        <v-icon>mdi-lightbulb-on</v-icon>
+      </v-btn>
+      <v-btn icon>
+        <v-icon>mdi-lightbulb-outline</v-icon>
       </v-btn>
       <template v-slot:extension>
         <v-tabs fixed-tabs show-arrows>
@@ -22,5 +23,6 @@
 </template>
 
 <script>
-export default {};
+export default {
+};
 </script>
