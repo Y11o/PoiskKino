@@ -51,28 +51,30 @@ export default {
     },
     loadRating(state) {
       if (localStorage.storedRating) {
-        if (localStorage.storedRating) {
-          let localStorRated = [];
-          localStorRated = JSON.parse(localStorage.storedRating);
-          localStorRated.forEach((element) => {
-            state.ratedFilms.push(JSON.parse(element));
-          });
+        let parsedFilms = [];
+        let storedRating = JSON.parse(localStorage.storedRating);
+        for (let elem = 0; elem < storedRating.length; elem++) {
+          parsedFilms.push({ filmId: 0, userRating: 0 });
+          const filmParsed = JSON.parse(storedRating[elem]);
+          parsedFilms[elem] = { ...filmParsed };
         }
+        state.ratedFilms = parsedFilms;
       }
     },
     addToSaved(state, payload) {
       state.savedFilms.push(payload);
     },
-    addToRated(state, payload) {
-      state.ratedFilms.push(payload);
+    addToRated(state, newFilm) {
+      let ratedId = state.ratedFilms.map((id) => id.filmId);
+      if (ratedId.includes(newFilm.filmId)) {
+        state.ratedFilms[state.ratedFilms.indexOf(newFilm.filmId)].userRating =
+          newFilm.userRating;
+      } else {
+        state.ratedFilms.push(newFilm);
+      }
     },
     deleteFromSaved(state, payload) {
       state.savedFilms = state.savedFilms.filter(
-        (element) => element !== payload
-      );
-    },
-    deleteFromRated(state, payload) {
-      state.ratedFilms = state.ratedFilms.filter(
         (element) => element !== payload
       );
     },
@@ -80,7 +82,7 @@ export default {
       localStorage.setItem("storedSaved", JSON.stringify(state.savedFilms));
     },
     setRated(state) {
-      localStorage.setItem("ratedFilms", JSON.stringify(state.ratedFilms));
+      localStorage.setItem("storedRating", JSON.stringify(state.ratedFilms));
     },
   },
   actions: {

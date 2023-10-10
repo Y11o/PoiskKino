@@ -25,6 +25,16 @@
         >
           <v-icon>mdi-bookmark</v-icon>
         </v-btn>
+        <v-rating
+          empty-icon="mdi-star-outline"
+          full-icon="mdi-star"
+          half-icon="mdi-star-half-full"
+          half-increments
+          hover
+          length="10"
+          size="32"
+          v-model="rating"
+        ></v-rating>
         <v-btn rounded color="primary" dark @click="goToFilmPage">
           На страницу фильма
         </v-btn>
@@ -45,7 +55,6 @@ export default {
       setSaved: "setSaved",
       setRated: "setRated",
       deleteFromSaved: "deleteFromSaved",
-      deleteFromRated: "deleteFromRated",
     }),
     save() {
       this.addToSaved(this.showFilm.filmId);
@@ -70,6 +79,25 @@ export default {
       savedFilms: (state) => state.savedFilms,
       ratedFilms: (state) => state.ratedFilms,
     }),
+    rating: {
+      get() {
+        let idFilms = this.ratedFilms.map((id) => id.filmId);
+        if (idFilms.includes(this.showFilm.filmId)) {
+          return this.ratedFilms[this.ratedFilms.indexOf(this.showFilm.filmId)]
+            .userRating;
+        } else {
+          return Math.round(this.showFilm.rating * 2) / 2;
+        }
+      },
+      set(newValue) {
+        let newFilm = {
+          filmId: this.showFilm.filmId,
+          userRating: newValue,
+        };
+        this.addToRated(newFilm);
+        this.setRated();
+      },
+    },
   },
 };
 </script>
