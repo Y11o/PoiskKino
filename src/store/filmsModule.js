@@ -8,6 +8,8 @@ export default {
     showFilm: {},
     totalFilmListPages: 1,
     filmKeyword: "",
+    savedFilms: [],
+    ratedFilms: [],
   },
   getters: {
     getFilms: (state) => state.films,
@@ -37,6 +39,48 @@ export default {
     },
     setFilmKeyword(state, payload) {
       state.filmKeyword = payload;
+    },
+    loadSaved(state) {
+      if (localStorage.storedSaved) {
+        let localStorSaved = [];
+        localStorSaved = JSON.parse(localStorage.storedSaved);
+        localStorSaved.forEach((element) => {
+          state.savedFilms.push(JSON.parse(element));
+        });
+      }
+    },
+    loadRating(state) {
+      if (localStorage.storedRating) {
+        if (localStorage.storedRating) {
+          let localStorRated = [];
+          localStorRated = JSON.parse(localStorage.storedRating);
+          localStorRated.forEach((element) => {
+            state.ratedFilms.push(JSON.parse(element));
+          });
+        }
+      }
+    },
+    addToSaved(state, payload) {
+      state.savedFilms.push(payload);
+    },
+    addToRated(state, payload) {
+      state.ratedFilms.push(payload);
+    },
+    deleteFromSaved(state, payload) {
+      state.savedFilms = state.savedFilms.filter(
+        (element) => element !== payload
+      );
+    },
+    deleteFromRated(state, payload) {
+      state.ratedFilms = state.ratedFilms.filter(
+        (element) => element !== payload
+      );
+    },
+    setSaved(state) {
+      localStorage.setItem("storedSaved", JSON.stringify(state.savedFilms));
+    },
+    setRated(state) {
+      localStorage.setItem("ratedFilms", JSON.stringify(state.ratedFilms));
     },
   },
   actions: {

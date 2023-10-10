@@ -15,6 +15,16 @@
         <v-img :src="showFilm.posterUrl" />
         Year: {{ showFilm.year }} Kinopoisk:
         {{ showFilm.rating }}
+        <v-btn icon @click="save" v-if="!savedFilms.includes(showFilm.filmId)">
+          <v-icon>mdi-bookmark-outline</v-icon>
+        </v-btn>
+        <v-btn
+          icon
+          @click="deleteSave"
+          v-if="savedFilms.includes(showFilm.filmId)"
+        >
+          <v-icon>mdi-bookmark</v-icon>
+        </v-btn>
         <v-btn rounded color="primary" dark @click="goToFilmPage">
           На страницу фильма
         </v-btn>
@@ -24,13 +34,27 @@
 </template>
 
 <script>
-import { mapMutations, mapState} from "vuex";
+import { mapMutations, mapState } from "vuex";
 
 export default {
   methods: {
-    ...mapMutations('films', {
+    ...mapMutations("films", {
       hideFilmDialog: "hideFilmDialog",
+      addToSaved: "addToSaved",
+      addToRated: "addToRated",
+      setSaved: "setSaved",
+      setRated: "setRated",
+      deleteFromSaved: "deleteFromSaved",
+      deleteFromRated: "deleteFromRated",
     }),
+    save() {
+      this.addToSaved(this.showFilm.filmId);
+      this.setSaved();
+    },
+    deleteSave() {
+      this.deleteFromSaved(this.showFilm.filmId);
+      this.setSaved();
+    },
     goToFilmPage() {
       this.$router.push({
         path: "/film",
@@ -40,9 +64,11 @@ export default {
     },
   },
   computed: {
-    ...mapState('films', {
+    ...mapState("films", {
       dialogVisible: (state) => state.dialogVisible,
       showFilm: (state) => state.showFilm,
+      savedFilms: (state) => state.savedFilms,
+      ratedFilms: (state) => state.ratedFilms,
     }),
   },
 };

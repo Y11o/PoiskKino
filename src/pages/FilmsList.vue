@@ -50,6 +50,8 @@ export default {
   data: () => ({}),
   created() {
     this.fetchFilms();
+    this.loadSaved();
+    this.loadRating();
   },
   methods: {
     ...mapActions("films", {
@@ -58,6 +60,8 @@ export default {
     ...mapMutations("films", {
       changePage: "changePage",
       setFilmKeyword: "setFilmKeyword",
+      loadSaved: "loadSaved",
+      loadRating: "loadRating",
     }),
     findFilms() {
       this.fetchFilms();
