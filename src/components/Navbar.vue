@@ -1,7 +1,6 @@
 <template>
   <v-container fluid>
     <v-app-bar app color="primary" dark dense hide-on-scroll>
-      <v-app-bar-nav-icon></v-app-bar-nav-icon>
       <v-toolbar-title class="flex text-center">
         <h2>POISK KINO</h2>
       </v-toolbar-title>
@@ -12,9 +11,8 @@
         <v-icon>mdi-lightbulb-outline</v-icon>
       </v-btn>
       <template v-slot:extension>
-        <v-tabs fixed-tabs show-arrows>
+        <v-tabs fixed-tabs show-arrows class="mr-16">
           <v-tab to="/"> Главная </v-tab>
-          <v-tab> #TODO рандомный фильм </v-tab>
           <v-tab to="/saved"> Избранное </v-tab>
         </v-tabs>
       </template>

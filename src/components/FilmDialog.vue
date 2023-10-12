@@ -83,7 +83,7 @@ export default {
       get() {
         let idFilms = this.ratedFilms.map((id) => id.filmId);
         if (idFilms.includes(this.showFilm.filmId)) {
-          return this.ratedFilms[this.ratedFilms.indexOf(this.showFilm.filmId)]
+          return this.ratedFilms[idFilms.indexOf(this.showFilm.filmId)]
             .userRating;
         } else {
           return Math.round(this.showFilm.rating * 2) / 2;

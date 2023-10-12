@@ -5,11 +5,14 @@ export default {
     films: [],
     dialogVisible: false,
     currentPage: 1,
+    currentSavedFilmsPage: 1,
     showFilm: {},
     totalFilmListPages: 1,
+    totalSavedFilmsListPages: 1,
     filmKeyword: "",
     savedFilms: [],
     ratedFilms: [],
+    savedFilmsObj: [],
   },
   getters: {
     getFilms: (state) => state.films,
@@ -31,11 +34,17 @@ export default {
     changePage(state, page) {
       state.currentPage = page;
     },
+    changePageSaved(state, page) {
+      state.changePageSaved = page;
+    },
     setShowFilm(state, payload) {
       state.showFilm = payload;
     },
     setTotalFilmListPages(state, payload) {
       state.totalFilmListPages = payload;
+    },
+    setTotalSavedFilmsListPages(state, payload) {
+      state.setTotalSavedFilmsListPages = payload;
     },
     setFilmKeyword(state, payload) {
       state.filmKeyword = payload;
@@ -52,10 +61,10 @@ export default {
     loadRating(state) {
       if (localStorage.storedRating) {
         let parsedFilms = [];
-        let storedRating = JSON.parse(localStorage.storedRating);
-        for (let elem = 0; elem < storedRating.length; elem++) {
-          parsedFilms.push({ filmId: 0, userRating: 0 });
-          const filmParsed = JSON.parse(storedRating[elem]);
+        let ratingFromStore = JSON.parse(localStorage.storedRating);
+        for (let elem = 0; elem < ratingFromStore.length; elem++) {
+          parsedFilms.push({});
+          const filmParsed = ratingFromStore[elem];
           parsedFilms[elem] = { ...filmParsed };
         }
         state.ratedFilms = parsedFilms;
@@ -67,7 +76,7 @@ export default {
     addToRated(state, newFilm) {
       let ratedId = state.ratedFilms.map((id) => id.filmId);
       if (ratedId.includes(newFilm.filmId)) {
-        state.ratedFilms[state.ratedFilms.indexOf(newFilm.filmId)].userRating =
+        state.ratedFilms[ratedId.indexOf(newFilm.filmId)].userRating =
           newFilm.userRating;
       } else {
         state.ratedFilms.push(newFilm);
@@ -86,6 +95,25 @@ export default {
     },
   },
   actions: {
+    async fetchSavedFilms(context) {
+      context.state.savedFilms.forEach(async (element) =>
+        context.state.savedFilmsObj.push(
+          await axios.get(
+            "https://kinopoiskapiunofficial.tech/api/v2.2/films/" + element,
+            {
+              headers: {
+                "X-API-KEY": "5a083dfc-2af6-456d-bc14-2f6adbae7052",
+                "Content-Type": "application/json",
+              },
+            }
+          )
+        )
+      );
+      context.commit(
+        "setTotalSavedFilmsListPages",
+        Math.ceil(context.state.savedFilmsObj.length / 20)
+      );
+    },
     async fetchFilms(context) {
       if (
         context.state.filmKeyword === "" ||
