@@ -35,7 +35,7 @@ export default {
       state.currentPage = page;
     },
     changePageSaved(state, page) {
-      state.changePageSaved = page;
+      state.currentSavedFilmsPage = page;
     },
     setShowFilm(state, payload) {
       state.showFilm = payload;
@@ -56,6 +56,19 @@ export default {
         localStorSaved.forEach((element) => {
           state.savedFilms.push(JSON.parse(element));
         });
+      }
+    },
+    loadSavedFilmsObj(state) {
+      if (localStorage.storedSavedObj) {
+        let parsedFilms = [];
+        let savedFilmsObjFromStore = JSON.parse(localStorage.storedSavedObj);
+        for (let elem = 0; elem < savedFilmsObjFromStore.length; elem++) {
+          parsedFilms.push({});
+          const filmParsed = savedFilmsObjFromStore[elem];
+          parsedFilms[elem] = { ...filmParsed };
+        }
+        state.totalSavedFilmsListPages = Math.ceil(parsedFilms.length / 20);
+        state.savedFilmsObj = parsedFilms;
       }
     },
     loadRating(state) {
@@ -90,29 +103,30 @@ export default {
     setSaved(state) {
       localStorage.setItem("storedSaved", JSON.stringify(state.savedFilms));
     },
+    setSavedObj(state) {
+      localStorage.setItem(
+        "storedSavedObj",
+        JSON.stringify(state.savedFilmsObj)
+      );
+    },
     setRated(state) {
       localStorage.setItem("storedRating", JSON.stringify(state.ratedFilms));
     },
   },
   actions: {
-    async fetchSavedFilms(context) {
-      context.state.savedFilms.forEach(async (element) =>
-        context.state.savedFilmsObj.push(
-          await axios.get(
-            "https://kinopoiskapiunofficial.tech/api/v2.2/films/" + element,
-            {
-              headers: {
-                "X-API-KEY": "5a083dfc-2af6-456d-bc14-2f6adbae7052",
-                "Content-Type": "application/json",
-              },
-            }
-          )
-        )
+    saveInFavs(context, payload) {
+      if (!context.state.savedFilmsObj.includes(payload)) {
+        context.state.savedFilmsObj.push(payload);
+        context.commit("setSavedObj");
+      }
+      context.commit("addToSaved", payload.filmId);
+    },
+    deleteFromFavs(context, payload) {
+      context.state.savedFilmsObj = context.state.savedFilmsObj.filter(
+        (element) => element !== payload 
       );
-      context.commit(
-        "setTotalSavedFilmsListPages",
-        Math.ceil(context.state.savedFilmsObj.length / 20)
-      );
+      context.commit("setSavedObj");
+      context.commit("deleteFromSaved", payload.filmId);
     },
     async fetchFilms(context) {
       if (

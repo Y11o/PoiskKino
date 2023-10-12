@@ -3,7 +3,7 @@
     <v-pagination
       v-model="pageSelected"
       :length="totalSavedFilmsListPages"
-      :total-visible="Math.ceil(totalSavedFilmsListPages / 2)"
+      :total-visible="Math.ceil(totalSavedFilmsListPages / 2) + 1"
       circle
     ></v-pagination>
     <v-row class="flex" align="center">
@@ -14,7 +14,7 @@
       <v-pagination
         v-model="pageSelected"
         :length="totalSavedFilmsListPages"
-        :total-visible="Math.ceil(totalSavedFilmsListPages / 2)"
+        :total-visible="Math.ceil(totalSavedFilmsListPages / 2) + 1"
         circle
       ></v-pagination>
     </div>
@@ -24,7 +24,7 @@
 <script>
 import Film from "@/components/Film.vue";
 import FilmDialog from "@/components/FilmDialog.vue";
-import { mapActions, mapMutations, mapState } from "vuex";
+import { mapMutations, mapState } from "vuex";
 
 export default {
   components: {
@@ -32,9 +32,9 @@ export default {
     FilmDialog,
   },
   mounted() {
+    this.loadSavedFilmsObj();
     this.loadSaved();
     this.loadRating();
-    this.fetchSavedFilms();
     if (this.savedFilmsObj.length < 20) {
       this.savedFilmsObjOnPage = this.savedFilmsObj.slice(
         0,
@@ -48,13 +48,11 @@ export default {
     savedFilmsObjOnPage: [],
   }),
   methods: {
-    ...mapActions("films", {
-      fetchSavedFilms: "fetchSavedFilms",
-    }),
     ...mapMutations("films", {
       changePageSaved: "changePageSaved",
       loadSaved: "loadSaved",
       loadRating: "loadRating",
+      loadSavedFilmsObj: "loadSavedFilmsObj",
     }),
   },
   computed: {

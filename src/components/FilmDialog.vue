@@ -44,24 +44,26 @@
 </template>
 
 <script>
-import { mapMutations, mapState } from "vuex";
+import { mapActions, mapMutations, mapState } from "vuex";
 
 export default {
   methods: {
     ...mapMutations("films", {
       hideFilmDialog: "hideFilmDialog",
-      addToSaved: "addToSaved",
       addToRated: "addToRated",
       setSaved: "setSaved",
       setRated: "setRated",
-      deleteFromSaved: "deleteFromSaved",
+    }),
+    ...mapActions("films", {
+      saveInFavs: "saveInFavs",
+      deleteFromFavs: "deleteFromFavs",
     }),
     save() {
-      this.addToSaved(this.showFilm.filmId);
+      this.saveInFavs(this.showFilm);
       this.setSaved();
     },
     deleteSave() {
-      this.deleteFromSaved(this.showFilm.filmId);
+      this.deleteFromFavs(this.showFilm);
       this.setSaved();
     },
     goToFilmPage() {
@@ -78,6 +80,7 @@ export default {
       showFilm: (state) => state.showFilm,
       savedFilms: (state) => state.savedFilms,
       ratedFilms: (state) => state.ratedFilms,
+      savedFilmsObj: (state) => state.savedFilmsObj,
     }),
     rating: {
       get() {
