@@ -44,7 +44,7 @@ export default {
       state.totalFilmListPages = payload;
     },
     setTotalSavedFilmsListPages(state, payload) {
-      state.setTotalSavedFilmsListPages = payload;
+      state.totalSavedFilmsListPages = payload;
     },
     setFilmKeyword(state, payload) {
       state.filmKeyword = payload;
@@ -54,8 +54,9 @@ export default {
         let localStorSaved = [];
         localStorSaved = JSON.parse(localStorage.storedSaved);
         localStorSaved.forEach((element) => {
-          state.savedFilms.push(JSON.parse(element));
+          JSON.parse(element);
         });
+        state.savedFilms = localStorSaved;
       }
     },
     loadSavedFilmsObj(state) {
@@ -84,7 +85,9 @@ export default {
       }
     },
     addToSaved(state, payload) {
-      state.savedFilms.push(payload);
+      if (!state.savedFilms.includes(payload)) {
+        state.savedFilms.push(payload);
+      }
     },
     addToRated(state, newFilm) {
       let ratedId = state.ratedFilms.map((id) => id.filmId);
@@ -115,17 +118,22 @@ export default {
   },
   actions: {
     saveInFavs(context, payload) {
-      if (!context.state.savedFilmsObj.includes(payload)) {
-        context.state.savedFilmsObj.push(payload);
+      if (!context.state.savedFilmsObj.includes(payload.film)) {
+        context.state.savedFilmsObj.push(payload.film);
         context.commit("setSavedObj");
       }
-      context.commit("addToSaved", payload.filmId);
+      if (payload.saved) {
+        context.commit("addToSaved", payload.film.filmId);
+      }
     },
     deleteFromFavs(context, payload) {
-      context.state.savedFilmsObj = context.state.savedFilmsObj.filter(
-        (element) => element !== payload 
-      );
-      context.commit("setSavedObj");
+      let ratedId = context.state.ratedFilms.map((id) => id.filmId);
+      if (!ratedId.includes(payload.filmId)) {
+        context.state.savedFilmsObj = context.state.savedFilmsObj.filter(
+          (element) => element !== payload
+        );
+        context.commit("setSavedObj");
+      }
       context.commit("deleteFromSaved", payload.filmId);
     },
     async fetchFilms(context) {

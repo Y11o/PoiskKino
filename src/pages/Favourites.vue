@@ -1,7 +1,6 @@
 <template>
   <v-container fluid>
     <v-pagination
-      v-if="keyWord === ''"
       v-model="pageSelected"
       :length="totalSavedFilmsListPages"
       :total-visible="Math.ceil(totalSavedFilmsListPages / 2) + 1"
@@ -29,7 +28,6 @@
     <FilmDialog />
     <div class="text-center">
       <v-pagination
-        v-if="keyWord === ''"
         v-model="pageSelected"
         :length="totalSavedFilmsListPages"
         :total-visible="Math.ceil(totalSavedFilmsListPages / 2) + 1"
@@ -72,18 +70,27 @@ export default {
       loadSaved: "loadSaved",
       loadRating: "loadRating",
       loadSavedFilmsObj: "loadSavedFilmsObj",
+      setTotalSavedFilmsListPages: "setTotalSavedFilmsListPages",
     }),
     filterSavedFilms() {
-      if (!this.keyWord === "") {
+      if (
+        !(
+          this.keyWord === "" ||
+          this.keyWord === null ||
+          this.keyWord === undefined
+        )
+      ) {
         let nameRuFilter = this.savedFilmsObj.filter((film) =>
-          film.nameRu.toLowerCase().includes(keyWord.toLowerCase())
+          (film.nameRu || "").toLowerCase().includes(this.keyWord.toLowerCase())
         );
         let nameEnFilter = this.savedFilmsObj.filter((film) =>
-          film.nameEn.toLowerCase().includes(keyWord.toLowerCase())
+          (film.nameEn || "").toLowerCase().includes(this.keyWord.toLowerCase())
         );
-        console.log(nameRuFilter.concat(nameEnFilter));
-        this.getFilmsOnPage(nameRuFilter.concat(nameEnFilter));
+        let concatedUniq = [...new Set([...nameEnFilter ,...nameRuFilter])];;
+        this.setTotalSavedFilmsListPages(Math.ceil(concatedUniq.length / 20));
+        this.getFilmsOnPage(concatedUniq);
       } else {
+        this.setTotalSavedFilmsListPages(Math.ceil(this.savedFilmsObj.length / 20));
         this.getFilmsOnPage(this.savedFilmsObj);
       }
     },
@@ -113,7 +120,7 @@ export default {
       },
       set(newValue) {
         this.changePageSaved(newValue);
-        this.getFilmsOnPage(this.savedFilmsObj);
+        this.filterSavedFilms();
       },
     },
   },

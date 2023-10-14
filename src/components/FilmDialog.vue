@@ -59,7 +59,11 @@ export default {
       deleteFromFavs: "deleteFromFavs",
     }),
     save() {
-      this.saveInFavs(this.showFilm);
+      let savedAdd = {
+            film: this.showFilm,
+            saved: true,
+          };
+      this.saveInFavs(savedAdd);
       this.setSaved();
     },
     deleteSave() {
@@ -97,6 +101,13 @@ export default {
           filmId: this.showFilm.filmId,
           userRating: newValue,
         };
+        if (!this.savedFilmsObj.includes(this.showFilm)) {
+          let ratedAdd = {
+            film: this.showFilm,
+            saved: false,
+          };
+          this.saveInFavs(ratedAdd);
+        }
         this.addToRated(newFilm);
         this.setRated();
       },
