@@ -31,11 +31,12 @@ export default {
     this.loadSavedFilmsObj();
     this.loadSaved();
     this.loadRating();
-    this.filterSavedFilms();
+    this.searchSavedFilms();
+    console.log(this.savedFilmsObjOnPage);
   },
   methods: {
     ...mapActions("films", {
-      filterSavedFilms: "filterSavedFilms",
+      searchSavedFilms: "searchSavedFilms",
     }),
     ...mapMutations("films", {
       loadSaved: "loadSaved",

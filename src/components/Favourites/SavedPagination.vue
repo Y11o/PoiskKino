@@ -15,7 +15,7 @@ import { mapMutations, mapState, mapActions } from "vuex";
 export default {
   methods: {
     ...mapActions("films", {
-      filterSavedFilms: "filterSavedFilms",
+      searchSavedFilms: "searchSavedFilms",
     }),
     ...mapMutations("films", {
       changePageSaved: "changePageSaved",
@@ -32,7 +32,7 @@ export default {
       },
       set(newValue) {
         this.changePageSaved(newValue);
-        this.filterSavedFilms();
+        this.searchSavedFilms();
       },
     },
   },

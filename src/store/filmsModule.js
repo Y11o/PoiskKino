@@ -149,7 +149,162 @@ export default {
       }
       context.commit("deleteFromSaved", payload.filmId);
     },
-    filterSavedFilms(context) {
+
+    filterSavedFilms(context, films) {
+      let filterParams = context.state.filterSettings;
+      if (
+        !(
+          filterParams.filterByCountry === "" ||
+          filterParams.filterByCountry === null ||
+          filterParams.filterByCountry === undefined ||
+          filterParams.filterByCountry === " "
+        )
+      ) {
+        films = films.filter((element) =>
+          element.countries
+            .map((id) => (id.country || "").toLowerCase())
+            .includes(filterParams.filterByCountry.toLowerCase())
+        );
+      }
+      if (
+        !(
+          filterParams.filterByGenre === "" ||
+          filterParams.filterByGenre === null ||
+          filterParams.filterByGenre === undefined ||
+          filterParams.filterByGenre === " "
+        )
+      ) {
+        films = films.filter((element) =>
+          element.genres
+            .map((id) => (id.genre || "").toLowerCase())
+            .includes(filterParams.filterByGenre.toLowerCase())
+        );
+      }
+      if (filterParams.sortDesc) {
+        switch (filterParams.sortBy) {
+          case "Названию":
+            films = films.sort((first, second) => {
+              const nameA = (first.nameEn || "").toUpperCase();
+              const nameB = (second.nameEn || "").toUpperCase();
+              if (nameA < nameB) {
+                return -1;
+              }
+              if (nameA > nameB) {
+                return 1;
+              }
+              return 0;
+            });
+            break;
+          case "Году":
+            films = films.sort(
+              (first, second) =>
+                parseInt(first.year || 0) - parseInt(second.year || 0)
+            );
+            break;
+          case "Хронометражу":
+            films = films.sort((first, second) => {
+              const timeFirst = (first.filmLength + ":00").split(":");
+              const timeSecond = (second.filmLength + ":00").split(":");
+              const dateFirst = new Date(
+                parseInt("2001", 10),
+                parseInt("01", 10) - 1,
+                parseInt("01", 10),
+                parseInt(timeFirst[0], 10),
+                parseInt(timeFirst[1], 10),
+                parseInt(timeFirst[2], 10)
+              ).valueOf();
+              const dateSecond = new Date(
+                parseInt("2001", 10),
+                parseInt("01", 10) - 1,
+                parseInt("01", 10),
+                parseInt(timeSecond[0], 10),
+                parseInt(timeSecond[1], 10),
+                parseInt(timeSecond[2], 10)
+              ).valueOf();
+              if (dateFirst < dateSecond) {
+                return -1;
+              }
+              if (dateFirst > dateSecond) {
+                return 1;
+              }
+              return 0;
+            });
+            break;
+          default:
+            films = films.sort(
+              (first, second) =>
+                (parseFloat(first.rating.replace(",", ".")) || 0) -
+                (parseFloat(second.rating.replace(",", ".")) || 0)
+            );
+            break;
+        }
+      } else {
+        switch (filterParams.sortBy) {
+          case "Названию":
+            films = films.sort((first, second) => {
+              const nameA = (first.nameEn || "").toUpperCase();
+              const nameB = (second.nameEn || "").toUpperCase();
+              if (nameA < nameB) {
+                return 1;
+              }
+              if (nameA > nameB) {
+                return -1;
+              }
+              return 0;
+            });
+            break;
+          case "Году":
+            films = films.sort(
+              (first, second) =>
+                parseInt(second.year || 0) - parseInt(first.year || 0)
+            );
+            break;
+          case "Хронометражу":
+            films = films.sort((first, second) => {
+              const timeFirst = (first.filmLength + ":00").split(":");
+              const timeSecond = (second.filmLength + ":00").split(":");
+              const dateFirst = new Date(
+                parseInt("2001", 10),
+                parseInt("01", 10) - 1,
+                parseInt("01", 10),
+                parseInt(timeFirst[0], 10),
+                parseInt(timeFirst[1], 10),
+                parseInt(timeFirst[2], 10)
+              ).valueOf();
+              const dateSecond = new Date(
+                parseInt("2001", 10),
+                parseInt("01", 10) - 1,
+                parseInt("01", 10),
+                parseInt(timeSecond[0], 10),
+                parseInt(timeSecond[1], 10),
+                parseInt(timeSecond[2], 10)
+              ).valueOf();
+              if (dateFirst < dateSecond) {
+                return 1;
+              }
+              if (dateFirst > dateSecond) {
+                return -1;
+              }
+              return 0;
+            });
+            break;
+          default:
+            films = films.sort(
+              (first, second) =>
+                (parseFloat(second.rating.replace(",", ".")) || 0) -
+                (parseFloat(first.rating.replace(",", ".")) || 0)
+            );
+            break;
+        }
+      }
+      context.commit(
+        "setTotalSavedFilmsListPages",
+        Math.ceil(films.length / 20)
+      );
+      context.dispatch("getFilmsOnPage", films);
+    },
+
+    searchSavedFilms(context) {
       if (
         !(
           context.state.savedKeyword === "" ||
@@ -158,23 +313,26 @@ export default {
         )
       ) {
         let nameRuFilter = context.state.savedFilmsObj.filter((film) =>
-          (film.nameRu || "").toLowerCase().includes(context.state.savedKeyword.toLowerCase())
+          (film.nameRu || "")
+            .toLowerCase()
+            .includes(context.state.savedKeyword.toLowerCase())
         );
         let nameEnFilter = context.state.savedFilmsObj.filter((film) =>
-          (film.nameEn || "").toLowerCase().includes(context.state.savedKeyword.toLowerCase())
+          (film.nameEn || "")
+            .toLowerCase()
+            .includes(context.state.savedKeyword.toLowerCase())
         );
         let concatedUniq = [...new Set([...nameEnFilter, ...nameRuFilter])];
-        context.commit("setTotalSavedFilmsListPages", (Math.ceil(concatedUniq.length / 20)));
-        context.dispatch("getFilmsOnPage", concatedUniq);
+        context.dispatch("filterSavedFilms", concatedUniq);
       } else {
-        context.commit("setTotalSavedFilmsListPages",(
-          Math.ceil(context.state.savedFilmsObj.length / 20)
-        ));
-        context.dispatch("getFilmsOnPage", context.state.savedFilmsObj);
+        context.dispatch("filterSavedFilms", context.state.savedFilmsObj);
       }
     },
     getFilmsOnPage(context, filmsArray) {
-      if (filmsArray.length < 20 + 20 * (context.state.currentSavedFilmsPage - 1)) {
+      if (
+        filmsArray.length <
+        20 + 20 * (context.state.currentSavedFilmsPage - 1)
+      ) {
         context.state.savedFilmsObjOnPage = filmsArray.slice(
           20 * (context.state.currentSavedFilmsPage - 1),
           filmsArray.length

@@ -2,10 +2,10 @@
   <v-container fluid>
     <v-toolbar dark color="blue darken-3" class="mb-1">
       <template v-if="$vuetify.breakpoint.mdAndUp">
-        <v-spacer></v-spacer>
         <v-text-field
           v-model="filterByCountry"
           @change="setFilter()"
+          @keydown.enter="setFilter()"
           flat
           solo-inverted
           hide-details
@@ -16,6 +16,7 @@
         <v-text-field
           v-model="filterByGenre"
           @change="setFilter()"
+          @keydown.enter="setFilter()"
           flat
           solo-inverted
           hide-details
@@ -25,16 +26,22 @@
         <v-spacer></v-spacer>
         <v-select
           v-model="sortBy"
+          @keydown.enter="setFilter()"
+          @change="setFilter()"
           flat
           solo-inverted
           hide-details
-          @change="setFilter()"
           :items="sortKeys"
           prepend-inner-icon="mdi-magnify"
           label="Sort by"
         ></v-select>
         <v-spacer></v-spacer>
-        <v-btn-toggle v-model="sortDesc" mandatory @change="setFilter()">
+        <v-btn-toggle
+          v-model="sortDesc"
+          mandatory
+          @change="setFilter()"
+          @keydown.enter="setFilter()"
+        >
           <v-btn large depressed color="blue" :value="false">
             <v-icon>mdi-arrow-up</v-icon>
           </v-btn>
@@ -63,13 +70,16 @@ export default {
   data: () => ({
     filterByCountry: "",
     filterByGenre: "",
-    sortBy: "Рейтингу",
-    sortKeys: ["Названию", "Году", "Рейтингу", "Хронометражу"],
+    sortBy: "Рейтингу Кинопоиска",
+    sortKeys: ["Названию", "Году", "Рейтингу Кинопоиска", "Хронометражу"],
     sortDesc: false,
   }),
   methods: {
     ...mapMutations("films", {
       setFilterSettings: "setFilterSettings",
+    }),
+    ...mapActions("films", {
+      searchSavedFilms: "searchSavedFilms",
     }),
     setFilter() {
       let filter = {
@@ -79,12 +89,11 @@ export default {
         sortDesc: this.sortDesc,
       };
       this.setFilterSettings(filter);
+      this.searchSavedFilms();
     },
   },
   computed: {
-    ...mapState("films", {
-      showFilterSettings: (state) => state.showFilterSettings,
-    }),
+    ...mapState("films", {}),
   },
 };
 </script>

@@ -7,11 +7,11 @@
           label="Введите название фильма"
           v-model="keyWord"
           clearable
-          @keydown.enter="filterSavedFilms()"
+          @keydown.enter="searchSavedFilms()"
         ></v-text-field>
       </v-col>
       <v-col>
-        <v-btn icon @click="filterSavedFilms()">
+        <v-btn icon @click="searchSavedFilms()">
           <v-icon>mdi-magnify</v-icon>
         </v-btn>
         <FilterSettings />
@@ -29,7 +29,7 @@ export default {
   },
   methods: {
     ...mapActions("films", {
-      filterSavedFilms: "filterSavedFilms",
+      searchSavedFilms: "searchSavedFilms",
     }),
     ...mapMutations("films", {
       changeSavedKeyword: "changeSavedKeyword",
