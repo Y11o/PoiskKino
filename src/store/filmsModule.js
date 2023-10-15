@@ -17,6 +17,7 @@ export default {
     filterSettings: {},
     savedKeyword: "",
     savedFilmsObjOnPage: [],
+    isDark: false,
   },
   getters: {
     getFilms: (state) => state.films,
@@ -26,6 +27,9 @@ export default {
     getTotalFilmListPages: (state) => state.totalFilmListPages,
   },
   mutations: {
+    toggleTheme(state) {
+      state.isDark = !state.isDark;
+    },
     setFilms(state, response) {
       state.films = response;
     },
