@@ -11,8 +11,8 @@
         <v-icon>mdi-lightbulb-outline</v-icon>
       </v-btn>
       <template v-slot:extension>
-        <v-tabs fixed-tabs show-arrows class="mr-16" color="surface">
-          <v-tab :class="class1" to="/"> Главная </v-tab>
+        <v-tabs fixed-tabs show-arrows class="mr-16" color="">
+          <v-tab :class="isDark ? 'surface' : 'white--text'" to="/"> Главная </v-tab>
           <v-tab class="white--text" to="/saved"> Избранное </v-tab>
         </v-tabs>
       </template>
@@ -27,12 +27,6 @@ export default {
     ...mapState("films", {
       isDark: "isDark",
     }),
-    appBarColor() {
-      return this.isDark ? "primary" : "surface";
-    },
-    class1() {
-      return this.isDark ? "primary" : "white--text";
-    },
   },
   methods: {
     ...mapMutations("films", {
