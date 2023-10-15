@@ -13,6 +13,10 @@ export default {
     savedFilms: [],
     ratedFilms: [],
     savedFilmsObj: [],
+    showFilterSettings: false,
+    filterSettings: {},
+    savedKeyword: "",
+    savedFilmsObjOnPage: [],
   },
   getters: {
     getFilms: (state) => state.films,
@@ -40,6 +44,9 @@ export default {
     setShowFilm(state, payload) {
       state.showFilm = payload;
     },
+    setShowFilterSettings(state, payload) {
+      state.showFilterSettings = payload;
+    },
     setTotalFilmListPages(state, payload) {
       state.totalFilmListPages = payload;
     },
@@ -48,6 +55,12 @@ export default {
     },
     setFilmKeyword(state, payload) {
       state.filmKeyword = payload;
+    },
+    changeSavedKeyword(state, payload) {
+      state.savedKeyword = payload;
+    },
+    setFilterSettings(state, payload) {
+      state.filterSettings = payload;
     },
     loadSaved(state) {
       if (localStorage.storedSaved) {
@@ -135,6 +148,43 @@ export default {
         context.commit("setSavedObj");
       }
       context.commit("deleteFromSaved", payload.filmId);
+    },
+    filterSavedFilms(context) {
+      if (
+        !(
+          context.state.savedKeyword === "" ||
+          context.state.savedKeyword === null ||
+          context.state.savedKeyword === undefined
+        )
+      ) {
+        let nameRuFilter = context.state.savedFilmsObj.filter((film) =>
+          (film.nameRu || "").toLowerCase().includes(context.state.savedKeyword.toLowerCase())
+        );
+        let nameEnFilter = context.state.savedFilmsObj.filter((film) =>
+          (film.nameEn || "").toLowerCase().includes(context.state.savedKeyword.toLowerCase())
+        );
+        let concatedUniq = [...new Set([...nameEnFilter, ...nameRuFilter])];
+        context.commit("setTotalSavedFilmsListPages", (Math.ceil(concatedUniq.length / 20)));
+        context.dispatch("getFilmsOnPage", concatedUniq);
+      } else {
+        context.commit("setTotalSavedFilmsListPages",(
+          Math.ceil(context.state.savedFilmsObj.length / 20)
+        ));
+        context.dispatch("getFilmsOnPage", context.state.savedFilmsObj);
+      }
+    },
+    getFilmsOnPage(context, filmsArray) {
+      if (filmsArray.length < 20 + 20 * (context.state.currentSavedFilmsPage - 1)) {
+        context.state.savedFilmsObjOnPage = filmsArray.slice(
+          20 * (context.state.currentSavedFilmsPage - 1),
+          filmsArray.length
+        );
+      } else {
+        context.state.savedFilmsObjOnPage = filmsArray.slice(
+          0 + 20 * (context.state.currentSavedFilmsPage - 1),
+          20 + 20 * (context.state.currentSavedFilmsPage - 1)
+        );
+      }
     },
     async fetchFilms(context) {
       if (

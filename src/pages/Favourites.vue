@@ -10,7 +10,7 @@
       <v-spacer></v-spacer>
       <v-col cols="3">
         <v-text-field
-          label="Введите название или описание фильма"
+          label="Введите название фильма"
           v-model="keyWord"
           clearable
           @keydown.enter="filterSavedFilms()"
@@ -20,8 +20,10 @@
         <v-btn icon @click="filterSavedFilms()">
           <v-icon>mdi-magnify</v-icon>
         </v-btn>
+        <FilterSettings />
       </v-col>
     </v-row>
+    <FilterSheet v-if="showFilterSettings" />
     <v-row class="flex" align="center">
       <Film v-for="film in savedFilmsObjOnPage" :film="film" :key="film.id" />
     </v-row>
@@ -40,79 +42,46 @@
 <script>
 import Film from "@/components/Film.vue";
 import FilmDialog from "@/components/FilmDialog.vue";
-import { mapMutations, mapState } from "vuex";
+import FilterSettings from "@/components/Favourites/FilterSettings.vue";
+import FilterSheet from "@/components/Favourites/FilterSheet.vue";
+import { mapMutations, mapState, mapActions } from "vuex";
 
 export default {
   components: {
     Film,
     FilmDialog,
+    FilterSettings,
+    FilterSheet,
   },
   created() {
     this.loadSavedFilmsObj();
     this.loadSaved();
     this.loadRating();
-    if (this.savedFilmsObj.length < 20) {
-      this.savedFilmsObjOnPage = this.savedFilmsObj.slice(
-        0,
-        this.savedFilmsObj.length
-      );
-    } else {
-      this.savedFilmsObjOnPage = this.savedFilmsObj.slice(0, 20);
-    }
+    console.log(this.savedFilmsObj[0]);
+    this.getFilmsOnPage(this.savedFilmsObj);
   },
-  data: () => ({
-    savedFilmsObjOnPage: [],
-    keyWord: "",
-  }),
   methods: {
+    ...mapActions("films", {
+      filterSavedFilms: "filterSavedFilms",
+      getFilmsOnPage: "getFilmsOnPage",
+    }),
     ...mapMutations("films", {
       changePageSaved: "changePageSaved",
       loadSaved: "loadSaved",
       loadRating: "loadRating",
       loadSavedFilmsObj: "loadSavedFilmsObj",
       setTotalSavedFilmsListPages: "setTotalSavedFilmsListPages",
+      changeSavedKeyword: "changeSavedKeyword",
     }),
-    filterSavedFilms() {
-      if (
-        !(
-          this.keyWord === "" ||
-          this.keyWord === null ||
-          this.keyWord === undefined
-        )
-      ) {
-        let nameRuFilter = this.savedFilmsObj.filter((film) =>
-          (film.nameRu || "").toLowerCase().includes(this.keyWord.toLowerCase())
-        );
-        let nameEnFilter = this.savedFilmsObj.filter((film) =>
-          (film.nameEn || "").toLowerCase().includes(this.keyWord.toLowerCase())
-        );
-        let concatedUniq = [...new Set([...nameEnFilter ,...nameRuFilter])];;
-        this.setTotalSavedFilmsListPages(Math.ceil(concatedUniq.length / 20));
-        this.getFilmsOnPage(concatedUniq);
-      } else {
-        this.setTotalSavedFilmsListPages(Math.ceil(this.savedFilmsObj.length / 20));
-        this.getFilmsOnPage(this.savedFilmsObj);
-      }
-    },
-    getFilmsOnPage(filmsArray) {
-      if (filmsArray.length < 20 + 20 * (this.currentSavedFilmsPage - 1)) {
-        this.savedFilmsObjOnPage = filmsArray.slice(
-          20 * (this.currentSavedFilmsPage - 1),
-          filmsArray.length
-        );
-      } else {
-        this.savedFilmsObjOnPage = filmsArray.slice(
-          0 + 20 * (this.currentSavedFilmsPage - 1),
-          20 + 20 * (this.currentSavedFilmsPage - 1)
-        );
-      }
-    },
   },
   computed: {
     ...mapState("films", {
       savedFilmsObj: (state) => state.savedFilmsObj,
       currentSavedFilmsPage: (state) => state.currentSavedFilmsPage,
       totalSavedFilmsListPages: (state) => state.totalSavedFilmsListPages,
+      showFilterSettings: (state) => state.showFilterSettings,
+      savedKeyword: (state) => state.savedKeyword,
+      savedFilmsObjOnPage: (state) => state.savedFilmsObjOnPage,
     }),
     pageSelected: {
       get() {
@@ -121,6 +90,14 @@ export default {
       set(newValue) {
         this.changePageSaved(newValue);
         this.filterSavedFilms();
+      },
+    },
+    keyWord: {
+      get() {
+        return this.savedKeyword;
+      },
+      set(newValue) {
+        this.changeSavedKeyword(newValue);
       },
     },
   },

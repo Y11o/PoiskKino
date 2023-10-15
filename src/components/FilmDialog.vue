@@ -1,46 +1,52 @@
 <template>
-  <v-dialog
-    v-model="dialogVisible"
-    max-width="600"
-    @click:outside="hideFilmDialog"
-  >
-    <v-card>
-      <v-card-title v-if="showFilm.nameOriginal">
-        {{ showFilm.nameOriginal }}
-      </v-card-title>
-      <v-card-title v-else>
-        {{ showFilm.nameRu }}
-      </v-card-title>
-      <v-card-text>
-        <v-img :src="showFilm.posterUrl" />
-        Year: {{ showFilm.year }} Kinopoisk:
-        {{ showFilm.rating }}
-        <v-btn icon @click="save" v-if="!savedFilms.includes(showFilm.filmId)">
-          <v-icon>mdi-bookmark-outline</v-icon>
-        </v-btn>
-        <v-btn
-          icon
-          @click="deleteSave"
-          v-if="savedFilms.includes(showFilm.filmId)"
-        >
-          <v-icon>mdi-bookmark</v-icon>
-        </v-btn>
-        <v-rating
-          empty-icon="mdi-star-outline"
-          full-icon="mdi-star"
-          half-icon="mdi-star-half-full"
-          half-increments
-          hover
-          length="10"
-          size="32"
-          v-model="rating"
-        ></v-rating>
-        <v-btn rounded color="primary" dark @click="goToFilmPage">
-          На страницу фильма
-        </v-btn>
-      </v-card-text>
-    </v-card>
-  </v-dialog>
+  <v-container fluid>
+    <v-dialog
+      v-model="dialogVisible"
+      max-width="600"
+      @click:outside="hideFilmDialog"
+    >
+      <v-card>
+        <v-card-title v-if="showFilm.nameOriginal">
+          {{ showFilm.nameOriginal }}
+        </v-card-title>
+        <v-card-title v-else>
+          {{ showFilm.nameRu }}
+        </v-card-title>
+        <v-card-text>
+          <v-img :src="showFilm.posterUrl" />
+          Year: {{ showFilm.year }} Kinopoisk:
+          {{ showFilm.rating }}
+          <v-btn
+            icon
+            @click="save"
+            v-if="!savedFilms.includes(showFilm.filmId)"
+          >
+            <v-icon>mdi-bookmark-outline</v-icon>
+          </v-btn>
+          <v-btn
+            icon
+            @click="deleteSave"
+            v-if="savedFilms.includes(showFilm.filmId)"
+          >
+            <v-icon>mdi-bookmark</v-icon>
+          </v-btn>
+          <v-rating
+            empty-icon="mdi-star-outline"
+            full-icon="mdi-star"
+            half-icon="mdi-star-half-full"
+            half-increments
+            hover
+            length="10"
+            size="32"
+            v-model="rating"
+          ></v-rating>
+          <v-btn rounded color="primary" dark @click="goToFilmPage">
+            На страницу фильма
+          </v-btn>
+        </v-card-text>
+      </v-card>
+    </v-dialog>
+  </v-container>
 </template>
 
 <script>
@@ -60,9 +66,9 @@ export default {
     }),
     save() {
       let savedAdd = {
-            film: this.showFilm,
-            saved: true,
-          };
+        film: this.showFilm,
+        saved: true,
+      };
       this.saveInFavs(savedAdd);
       this.setSaved();
     },
