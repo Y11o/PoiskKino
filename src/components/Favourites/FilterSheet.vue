@@ -1,6 +1,6 @@
 <template>
   <v-container fluid>
-    <v-toolbar dark color="blue darken-3" class="mb-1">
+    <v-toolbar dark color="blue darken-1" class="mb-1">
       <template v-if="$vuetify.breakpoint.mdAndUp">
         <v-text-field
           v-model="filterByCountry"
@@ -9,6 +9,7 @@
           flat
           solo-inverted
           hide-details
+          clearable
           prepend-inner-icon="mdi-magnify"
           label="Введите страну"
         ></v-text-field>
@@ -20,6 +21,7 @@
           flat
           solo-inverted
           hide-details
+          clearable
           prepend-inner-icon="mdi-magnify"
           label="Введите жанр"
         ></v-text-field>

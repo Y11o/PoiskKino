@@ -1,22 +1,27 @@
 <template>
   <v-container fluid>
-    <v-row class="flex" align="center">
-      <v-spacer></v-spacer>
-      <v-col cols="3">
-        <v-text-field
-          label="Введите название фильма"
-          v-model="keyWord"
-          clearable
-          @keydown.enter="searchSavedFilms()"
-        ></v-text-field>
-      </v-col>
-      <v-col>
-        <v-btn icon @click="searchSavedFilms()">
-          <v-icon>mdi-magnify</v-icon>
-        </v-btn>
-        <FilterSettings />
-      </v-col>
-    </v-row>
+    <v-toolbar dark color="blue darken-3" class="mb-1">
+      <v-row class="flex" align="center">
+        <v-spacer></v-spacer>
+        <v-col cols="3">
+          <v-text-field
+            flat
+            solo-inverted
+            hide-details
+            label="Введите название фильма"
+            v-model="keyWord"
+            clearable
+            @keydown.enter="searchSavedFilms()"
+          ></v-text-field>
+        </v-col>
+        <v-col>
+          <v-btn icon @click="searchSavedFilms()">
+            <v-icon>mdi-magnify</v-icon>
+          </v-btn>
+          <FilterSettings />
+        </v-col>
+      </v-row>
+    </v-toolbar>
   </v-container>
 </template>
 

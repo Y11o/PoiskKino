@@ -1,21 +1,26 @@
 <template>
   <v-container fluid>
-    <v-row class="flex" align="center" dense>
-      <v-spacer></v-spacer>
-      <v-col cols="3">
-        <v-text-field
-          label="Введите название или описание фильма"
-          v-model="findByKeyword"
-          clearable
-          @keydown.enter="findFilms()"
-        ></v-text-field>
-      </v-col>
-      <v-col cols="5">
-        <v-btn icon @click="findFilms()">
-          <v-icon>mdi-magnify</v-icon>
-        </v-btn>
-      </v-col>
-    </v-row>
+    <v-toolbar dark color="blue darken-3" class="mb-1">
+      <v-row class="flex" align="center">
+        <v-spacer></v-spacer>
+        <v-col cols="3">
+          <v-text-field
+            flat
+            solo-inverted
+            hide-details
+            label="Введите название или описание фильма"
+            v-model="findByKeyword"
+            clearable
+            @keydown.enter="findFilms()"
+          ></v-text-field>
+        </v-col>
+        <v-col>
+          <v-btn icon @click="findFilms()">
+            <v-icon>mdi-magnify</v-icon>
+          </v-btn>
+        </v-col>
+      </v-row>
+    </v-toolbar>
   </v-container>
 </template>
 
@@ -30,7 +35,7 @@ export default {
       fetchFilms: "fetchFilms",
     }),
     ...mapMutations("films", {
-      setFilmKeyword: "setFilmKeyword",      
+      setFilmKeyword: "setFilmKeyword",
     }),
     findFilms() {
       this.fetchFilms();

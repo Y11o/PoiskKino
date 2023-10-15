@@ -1,15 +1,17 @@
 <template>
   <v-container fluid>
-    <v-row>
-      <v-col cols="11">
-        <v-pagination
-          v-model="pageSelected"
-          :length="totalFilmListPages"
-          :total-visible="Math.ceil(totalFilmListPages / 2) + 1"
-          circle
-        ></v-pagination>
-      </v-col>
-    </v-row>
+    <v-toolbar class="mb-1 elevation-0 pa-0">
+      <v-row>
+        <v-col cols="12">
+          <v-pagination
+            v-model="pageSelected"
+            :length="totalFilmListPages"
+            :total-visible="Math.ceil(totalFilmListPages / 2) + 1"
+            circle
+          ></v-pagination>
+        </v-col>
+      </v-row>
+    </v-toolbar>
   </v-container>
 </template>
 
