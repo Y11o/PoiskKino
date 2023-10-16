@@ -32,7 +32,6 @@ export default {
     this.loadSaved();
     this.loadRating();
     this.searchSavedFilms();
-    console.log(this.savedFilmsObjOnPage);
   },
   methods: {
     ...mapActions("films", {

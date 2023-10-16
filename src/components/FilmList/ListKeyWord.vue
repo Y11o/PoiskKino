@@ -12,6 +12,7 @@
             v-model="findByKeyword"
             clearable
             @keydown.enter="findFilms()"
+            @blur="findFilms()"
           ></v-text-field>
         </v-col>
         <v-col>

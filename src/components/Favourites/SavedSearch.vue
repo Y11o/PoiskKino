@@ -12,6 +12,7 @@
             v-model="keyWord"
             clearable
             @keydown.enter="searchSavedFilms()"
+            @blur="searchSavedFilms()"
           ></v-text-field>
         </v-col>
         <v-col>
