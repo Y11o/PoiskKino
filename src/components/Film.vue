@@ -1,18 +1,11 @@
 <template>
-  <v-col cols="3">
+  <v-col cols="3" >
     <v-hover>
       <template v-slot:default="{ hover }">
-        <v-card
-          height="100%"
-          width="100%"
-          class="elevation-0 pa-0"
-          @click="showMore"
-        >
-          <v-card-text>
-            <v-img :src="film.posterUrl" />
-          </v-card-text>
+        <v-card height="100%" width="100%" @click="showMore">
+          <v-img :src="film.posterUrl" />
           <v-fade-transition>
-            <v-overlay v-if="hover" absolute color="#1976d2" z-index="3">
+            <v-overlay v-if="hover" absolute color="secondary" z-index="3">
             </v-overlay>
           </v-fade-transition>
         </v-card>
@@ -35,7 +28,7 @@ export default {
     },
   },
   methods: {
-    ...mapMutations('films', {
+    ...mapMutations("films", {
       setShowFilm: "setShowFilm",
       showFilmDialog: "showFilmDialog",
     }),

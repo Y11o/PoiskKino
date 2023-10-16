@@ -1,6 +1,6 @@
 <template>
   <v-container fluid>
-    <v-toolbar dark color="blue darken-3" class="mb-1">
+    <v-toolbar dark color="secondary" class="mb-1">
       <v-row class="flex" align="center">
         <v-spacer></v-spacer>
         <v-col cols="3">

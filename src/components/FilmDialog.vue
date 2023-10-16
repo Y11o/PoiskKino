@@ -2,47 +2,69 @@
   <v-container fluid>
     <v-dialog
       v-model="dialogVisible"
-      max-width="600"
       @click:outside="hideFilmDialog"
+      max-height="1200"
+      max-width="800"
+      overlay-color="secondary"
+      overlay-opacity="0.25"
     >
-      <v-card>
-        <v-card-title v-if="showFilm.nameOriginal">
-          {{ showFilm.nameOriginal }}
-        </v-card-title>
-        <v-card-title v-else>
-          {{ showFilm.nameRu }}
-        </v-card-title>
+      <v-card color="background">
+        <v-row justify="center">
+          <v-card-title v-if="showFilm.nameOriginal" class="primary">
+            {{ showFilm.nameOriginal }}
+          </v-card-title>
+          <v-card-title v-else>
+            {{ showFilm.nameRu }}
+          </v-card-title>
+        </v-row>
         <v-card-text>
-          <v-img :src="showFilm.posterUrl" />
-          Year: {{ showFilm.year }} Kinopoisk:
-          {{ showFilm.rating }}
-          <v-btn
-            icon
-            @click="save"
-            v-if="!savedFilms.includes(showFilm.filmId)"
-          >
-            <v-icon>mdi-bookmark-outline</v-icon>
-          </v-btn>
-          <v-btn
-            icon
-            @click="deleteSave"
-            v-if="savedFilms.includes(showFilm.filmId)"
-          >
-            <v-icon>mdi-bookmark</v-icon>
-          </v-btn>
-          <v-rating
-            empty-icon="mdi-star-outline"
-            full-icon="mdi-star"
-            half-icon="mdi-star-half-full"
-            half-increments
-            hover
-            length="10"
-            size="32"
-            v-model="rating"
-          ></v-rating>
-          <v-btn rounded color="primary" dark @click="goToFilmPage">
-            На страницу фильма
-          </v-btn>
+          <v-row justify="center">
+            <v-col>
+              <v-img :src="showFilm.posterUrl" />
+            </v-col>
+          </v-row>
+          <v-row justify="center">
+            <v-col cols="2">
+              Year: {{ showFilm.year }} Kinopoisk:
+              {{ showFilm.rating }}
+            </v-col>
+            <v-col cols="1">
+              <v-btn
+                icon
+                @click="save"
+                color="secondary"
+                v-if="!savedFilms.includes(showFilm.filmId)"
+              >
+                <v-icon>mdi-bookmark-outline</v-icon>
+              </v-btn>
+              <v-btn
+                icon
+                @click="deleteSave"
+                color="surface"
+                v-if="savedFilms.includes(showFilm.filmId)"
+              >
+                <v-icon>mdi-bookmark</v-icon>
+              </v-btn>
+            </v-col>
+          </v-row>
+          <v-row justify="center" class="mu-6">
+            <v-rating
+              empty-icon="mdi-star-outline"
+              full-icon="mdi-star"
+              half-icon="mdi-star-half-full"
+              background-color="secondary"
+              half-increments
+              hover
+              length="10"
+              size="28"
+              v-model="rating"
+            ></v-rating>
+          </v-row>
+          <v-row justify="center" class="ma-6">
+            <v-btn rounded color="primary" dark @click="goToFilmPage">
+              На страницу фильма
+            </v-btn>
+          </v-row>
         </v-card-text>
       </v-card>
     </v-dialog>

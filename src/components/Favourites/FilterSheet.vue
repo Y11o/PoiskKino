@@ -1,6 +1,6 @@
 <template>
   <v-container fluid>
-    <v-toolbar dark color="blue darken-1" class="mb-1">
+    <v-toolbar dark color="secondary" class="mb-1">
       <template v-if="$vuetify.breakpoint.mdAndUp">
         <v-text-field
           v-model="filterByCountry"
@@ -40,14 +40,13 @@
         <v-spacer></v-spacer>
         <v-btn-toggle
           v-model="sortDesc"
-          mandatory
           @change="setFilter()"
           @keydown.enter="setFilter()"
         >
-          <v-btn large depressed color="blue" :value="false">
+          <v-btn large depressed color="surface" :value="false">
             <v-icon>mdi-arrow-up</v-icon>
           </v-btn>
-          <v-btn large depressed color="blue" :value="true">
+          <v-btn large depressed color="surface" :value="true">
             <v-icon>mdi-arrow-down</v-icon>
           </v-btn>
         </v-btn-toggle>

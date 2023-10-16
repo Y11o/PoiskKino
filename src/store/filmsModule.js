@@ -27,7 +27,7 @@ export default {
     getTotalFilmListPages: (state) => state.totalFilmListPages,
   },
   mutations: {
-    toggleTheme(state) {
+    toggleStoreTheme(state) {
       state.isDark = !state.isDark;
     },
     setFilms(state, response) {

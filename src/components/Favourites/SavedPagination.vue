@@ -1,10 +1,13 @@
 <template>
   <v-container fluid>
-    <v-toolbar class="mb-1 elevation-0 pa-0">
+    <v-toolbar class="mb-1 elevation-0 pa-0" color="background">
       <v-row>
         <v-col cols="12">
           <v-pagination
             v-model="pageSelected"
+            navigation-text-color="white"
+            navigation-color="surface"
+            color="secondary"
             :length="totalSavedFilmsListPages"
             :total-visible="Math.ceil(totalSavedFilmsListPages / 2) + 1"
             circle

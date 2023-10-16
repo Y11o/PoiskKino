@@ -1,7 +1,7 @@
 <template>
-  <v-app :class="{ 'theme--dark': isDark }">
+  <v-app>
     <Navbar />
-    <v-main><router-view /></v-main>
+    <v-main class="background"><router-view /></v-main>
   </v-app>
 </template>
 

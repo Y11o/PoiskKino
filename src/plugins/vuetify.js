@@ -1,6 +1,6 @@
 import Vue from "vue";
 import Vuetify from "vuetify/lib/framework";
-import store from "@/store/index.js";
+import colors from "vuetify/lib/util/colors";
 
 Vue.use(Vuetify);
 
@@ -11,28 +11,21 @@ const vuetify = new Vuetify({
     },
     themes: {
       light: {
-        background: "#eee",
-        surface: "#ff5722",
-        primary: "#f85b49",
-        secondary: "#00ccff",
-        error: "#ffcc00",
+        background: colors.grey.lighten3,
+        surface: "#FF6633",
+        primary: colors.deepOrange,
+        secondary: "#FF9966",
+        error: colors.red.darken4,
       },
       dark: {
-        background: "#15202b",
-        surface: "#15202b",
-        primary: "#f85b49",
-        secondary: "#03dac6",
-        error: "#ff5722",
+        background: colors.grey.darken4,
+        surface: colors.indigo.darken3,
+        primary: colors.indigo,
+        secondary: colors.indigo.lighten1,
+        error: colors.red.darken4,
       },
     },
   },
 });
-
-store.watch(
-  (state) => state.isDark,
-  (newVal) => {
-    vuetify.framework.theme.dark = newVal;
-  }
-);
 
 export default vuetify;
