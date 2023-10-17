@@ -81,10 +81,10 @@
               @change="setFilter()"
               @keydown.enter="setFilter()"
             >
-              <v-btn large depressed color="surface" :value="false">
+              <v-btn depressed color="surface" :value="false">
                 <v-icon>mdi-arrow-up</v-icon>
               </v-btn>
-              <v-btn large depressed color="surface" :value="true">
+              <v-btn depressed color="surface" :value="true">
                 <v-icon>mdi-arrow-down</v-icon>
               </v-btn>
             </v-btn-toggle>

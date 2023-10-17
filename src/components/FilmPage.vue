@@ -46,7 +46,7 @@
         <v-col cols="8">
           {{ film.description }}
 
-          <v-row no-gutters>
+          <v-row>
             <v-col cols="6">
               <v-sheet v-if="film.slogan" class="pt-2 mt-2" color="background">
                 Слоган: {{ film.slogan }}
@@ -101,7 +101,7 @@
             </v-col>
           </v-row>
 
-          <v-row no-gutters>
+          <v-row >
             <v-col>
               <v-sheet v-if="film.year" class="pt-2 mt-2" color="background">
                 Релиз {{ film.year }} года</v-sheet
@@ -164,7 +164,7 @@
       </v-card>
     </v-row>
     <v-row align="center" justify="center" class="pa-0 ma-0">
-      <v-col cols="3" v-for="rec in similars" :film="rec" :key="rec.filmId">
+      <v-col cols="6" md="3" v-for="rec in similars" :film="rec" :key="rec.filmId">
         <v-hover>
           <template v-slot:default="{ hover }">
             <v-card max-heigh="600" max-width="400">
