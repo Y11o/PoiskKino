@@ -1,4 +1,5 @@
 <template>
+  <!-- Компонент интерактивного рейтинга -->
   <v-rating
     empty-icon="mdi-star-outline"
     full-icon="mdi-star"
@@ -31,7 +32,7 @@ export default {
       ratedFilms: (state) => state.ratedFilms,
       savedFilmsObj: (state) => state.savedFilmsObj,
     }),
-    ratingSize() {
+    ratingSize() {    //Определение размеров пунктов рейтинга в зависимости от размеров устройства
       switch (this.$vuetify.breakpoint.name) {
         case "xs":
           return 18;
@@ -46,8 +47,8 @@ export default {
       }
     },
     rating: {
-      get() {
-        let idFilms = this.ratedFilms.map((id) => id.filmId);
+      get() {   //Если пользователь не оценил фильм, то отображается рейтинг Кинопоиска с точностью до 0.5 (пункт заполняется на половину)
+        let idFilms = this.ratedFilms.map((id) => id.filmId); 
         if (idFilms.includes(this.showFilm.filmId)) {
           return this.ratedFilms[idFilms.indexOf(this.showFilm.filmId)]
             .userRating;
@@ -55,7 +56,7 @@ export default {
           return Math.round(this.showFilm.rating * 2) / 2;
         }
       },
-      set(newValue) {
+      set(newValue) {   //При оценке пользователем фильма
         let newFilm = {
           filmId: this.showFilm.filmId,
           userRating: newValue,

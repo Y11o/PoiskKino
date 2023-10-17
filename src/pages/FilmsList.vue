@@ -1,11 +1,18 @@
 <template>
+  <!-- Компонент, отображающий страницу с фильмами, полученными от API -->
   <v-container fluid>
+    <!-- Пагинация -->
     <ListPagination />
+    <!-- Поиск по ключевым словам -->
     <ListKeyWord />
+    <!-- Отрисовка карточек с фильмами -->
     <v-row align="center" justify="center" class="pa-0 ma-0">
+      <!-- Компонент карточки фильма -->
       <Film v-for="film in films" :film="film" :key="film.id" />
     </v-row>
+    <!-- Диалог открывается при нажатии. По нему осуществляется переход на страницу фильма. Отображает более подробную информацию о фильме -->
     <FilmDialog />
+    <!-- Пагинация -->
     <ListPagination />
   </v-container>
 </template>
@@ -25,9 +32,9 @@ export default {
     ListKeyWord,
   },
   created() {
-    this.fetchFilms();
-    this.loadSaved();
-    this.loadRating();
+    this.fetchFilms();  //Запрос к API с фильмами
+    this.loadSaved();   //Загрузка избранных из localStorage
+    this.loadRating();  //Загрузка оцененных из localStorage
   },
   methods: {
     ...mapActions("films", {

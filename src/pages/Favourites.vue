@@ -1,12 +1,20 @@
 <template>
+  <!-- Компонент, отображающий страницу с фильмами, сохраненными и/или оцененными пользователем -->
   <v-container fluid>
+    <!-- Пагинация -->
     <SavedPaginations />
+    <!-- Поиск по ключевым словам -->
     <SavedSearch />
+    <!-- Компонент настройки фильтрации -->
     <FilterSheet v-if="showFilterSettings" />
+    <!-- Отрисовка фильмов -->
     <v-row align="center" justify="center" class="pa-0 ma-0">
+      <!-- Компонент карточки фильма -->
       <Film v-for="film in savedFilmsObjOnPage" :film="film" :key="film.id" />
     </v-row>
+    <!-- Диалог открывается при нажатии. По нему осуществляется переход на страницу фильма. Отображает более подробную информацию о фильме -->
     <FilmDialog />
+    <!-- Пагинация -->
     <SavedPaginations />
   </v-container>
 </template>
@@ -28,10 +36,10 @@ export default {
     SavedSearch,
   },
   created() {
-    this.loadSavedFilmsObj();
-    this.loadSaved();
-    this.loadRating();
-    this.searchSavedFilms();
+    this.loadSavedFilmsObj(); //Загрузка оцененных и сохранненых объектов фильмов из localStorage
+    this.loadSaved();         //Загрузка сохранненых фильмов из localStorage
+    this.loadRating();        //Загрузка оцененных фильмов из localStorage
+    this.searchSavedFilms();  //Загрузка оцененных и сохранненых объектов фильмов из localStorage
   },
   methods: {
     ...mapActions("films", {

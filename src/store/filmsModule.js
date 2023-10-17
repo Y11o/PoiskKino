@@ -1,6 +1,6 @@
 import axios from "axios";
 
-export default {
+export default {    //Здесь описана логика работы с API, с сохраненными и оцененными фильмами
   state: {
     films: [],
     dialogVisible: false,
@@ -365,7 +365,7 @@ export default {
             params: {
               page: context.state.currentPage,
             },
-            headers: {
+            headers: { //d3293c50-bae5-4091-9c53-23cab41ad74e
               "X-API-KEY": "5a083dfc-2af6-456d-bc14-2f6adbae7052",
               "Content-Type": "application/json",
             },

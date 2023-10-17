@@ -1,7 +1,9 @@
 <template>
+  <!-- Компонент страницы фильма с подробной информацией -->
   <v-container fluid>
     <v-card color="background" flat>
       <v-row justify="center" align="baseline">
+        <!-- Заголовок: название фильма -->
         <v-card-title v-if="film.nameRu" color="background">
           {{ film.nameRu }}
         </v-card-title>
@@ -19,6 +21,7 @@
         >
           {{ film.nameEn }}
         </v-card-title>
+        <!-- Добавлен ли фильм в избранные -->
         <v-sheet class="mt-2" color="background">
           <v-btn
             icon
@@ -40,20 +43,23 @@
       </v-row>
       <v-row>
         <v-col cols="4">
+          <!-- Постер фильма -->
           <v-img max-heigh="900" max-width="600" :src="film.posterUrl" />
         </v-col>
-
+        <!-- Описание фильма -->
         <v-col cols="8">
           {{ film.description }}
 
           <v-row>
             <v-col cols="6">
+              <!-- Слоган фильма -->
               <v-sheet v-if="film.slogan" class="pt-2 mt-2" color="background">
                 Слоган: {{ film.slogan }}
               </v-sheet>
             </v-col>
 
             <v-col cols="6">
+              <!-- Рейтинг кинопоиска и количество голосов -->
               <v-row no-gutters>
                 <v-col>
                   <v-sheet
@@ -77,6 +83,7 @@
                 </v-col>
               </v-row>
               <v-row no-gutters>
+                <!-- Рейтинг IMDb и количество голосов -->
                 <v-col>
                   <v-sheet
                     v-if="film.ratingImdb"
@@ -101,14 +108,16 @@
             </v-col>
           </v-row>
 
-          <v-row >
+          <v-row>
             <v-col>
+              <!-- Дата релиза фильма -->
               <v-sheet v-if="film.year" class="pt-2 mt-2" color="background">
                 Релиз {{ film.year }} года</v-sheet
               >
             </v-col>
 
             <v-col>
+              <!-- Возрастное ограничение -->
               <v-sheet
                 v-if="film.ratingAgeLimits"
                 class="pt-2 mt-2"
@@ -121,6 +130,7 @@
           </v-row>
           <v-row no-gutters v-if="!xsRating">
             <v-col>
+              <!-- Оценка пользователя. При её отсутствии - оценка кинопоиска  -->
               <v-sheet class="mt-2" color="background">
                 Ваша оценка:
                 <Rating />
@@ -140,11 +150,18 @@
     </v-card>
     <v-row justify="center">
       <v-card color="background" flat>
+        <!-- Рекомендации к просмотру. Приходят от API -->
         <v-card-title>Также рекомендуем к просмотру</v-card-title>
       </v-card>
     </v-row>
     <v-row align="center" justify="center" class="pa-0 ma-0">
-      <v-col cols="6" md="3" v-for="rec in similars" :film="rec" :key="rec.filmId">
+      <v-col
+        cols="6"
+        md="3"
+        v-for="rec in similars"
+        :film="rec"
+        :key="rec.filmId"
+      >
         <v-hover>
           <template v-slot:default="{ hover }">
             <v-card max-heigh="600" max-width="400">

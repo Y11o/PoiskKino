@@ -1,6 +1,8 @@
 <template>
+  <!-- Компонент навигации -->
   <v-container fluid>
     <v-app-bar app color="primary" dense hide-on-scroll>
+      <!-- На xs и sm устройствах кнопка изменения акцента будет слева от заголовка сайта-->
       <v-sheet class="pa-0 ma-0" color="primary" v-if="!adaptiveSizing">
         <v-btn
           icon
@@ -27,9 +29,15 @@
           <v-icon>mdi-invert-colors</v-icon>
         </v-btn>
       </v-sheet>
-      <v-toolbar-title :class="`flex text-center ${adaptiveSizing?'pl-4 ml-16':'pl-0 ml-0 mr-3'}`">
+      <!-- Заголовок сайта -->
+      <v-toolbar-title
+        :class="`flex text-center ${
+          adaptiveSizing ? 'pl-4 ml-16' : 'pl-0 ml-0 mr-3'
+        }`"
+      >
         <h2 class="white--text">POISK KINO</h2>
       </v-toolbar-title>
+      <!-- Кнопка изменения акцента сайта. Цвета описаны в plugins/vuetify.js, логика работы в store/themeModule -->
       <v-sheet class="pa-0 ma-0" color="primary" v-if="adaptiveSizing">
         <v-btn
           icon
@@ -56,6 +64,7 @@
           <v-icon>mdi-invert-colors</v-icon>
         </v-btn>
       </v-sheet>
+      <!-- Кнопка переключения темы сайта -->
       <v-sheet class="pa-0 ma-0" color="primary">
         <v-btn icon v-if="!isDark" @click="toggleTheme()" class="white--text">
           <v-icon>mdi-lightbulb-on</v-icon>
@@ -64,6 +73,7 @@
           <v-icon>mdi-lightbulb-outline</v-icon>
         </v-btn>
       </v-sheet>
+      <!-- Табы навигации по сайту -->
       <template v-slot:extension>
         <v-tabs fixed-tabs show-arrows centered active-class="surface">
           <v-tab class="white--text" to="/"> Главная </v-tab>
@@ -82,7 +92,7 @@ export default {
       isDark: "isDark",
       accent: "accent",
     }),
-    adaptiveSizing() {
+    adaptiveSizing() {  //Проверка размеров устройства
       switch (this.$vuetify.breakpoint.name) {
         case "xs":
           return false;
@@ -97,19 +107,19 @@ export default {
       }
     },
   },
-  beforeUnmount() {
+  beforeUnmount() {   //Перед закрытием сохраняются настройки темы и акцента сайта в localStorage
     this.setLocalStoredTheme();
   },
-  beforeMount() {
+  beforeMount() {     //Установка темы при загрузке сайта (данные из localStorage уже загружены во Vuex)
     this.$vuetify.theme.dark = this.isDark;
   },
   methods: {
-    toggleTheme() {
+    toggleTheme() { //Смена темы сайта
       this.$vuetify.theme.dark = !this.$vuetify.theme.dark;
       this.toggleStoreTheme(!this.isDark);
       this.setLocalStoredTheme();
     },
-    switchAccent() {
+    switchAccent() {  //Смена акцента сайта
       this.toggleAccent((this.accent + 1) % 3);
       this.setLocalStoredTheme();
     },
