@@ -119,7 +119,7 @@
               >
             </v-col>
           </v-row>
-          <v-row no-gutters>
+          <v-row no-gutters v-if="!xsRating">
             <v-col>
               <v-sheet class="mt-2" color="background">
                 Ваша оценка:
@@ -131,12 +131,30 @@
                   half-increments
                   hover
                   length="10"
-                  size="24"
+                  :size="ratingSize"
                   v-model="rating"
                 ></v-rating>
               </v-sheet>
             </v-col>
           </v-row>
+        </v-col>
+      </v-row>
+      <v-row no-gutters v-if="xsRating">
+        <v-col>
+          <v-sheet class="mt-2" color="background">
+            Ваша оценка:
+            <v-rating
+              empty-icon="mdi-star-outline"
+              full-icon="mdi-star"
+              half-icon="mdi-star-half-full"
+              background-color="secondary"
+              half-increments
+              hover
+              length="10"
+              :size="ratingSize"
+              v-model="rating"
+            ></v-rating>
+          </v-sheet>
         </v-col>
       </v-row>
     </v-card>
@@ -145,7 +163,7 @@
         <v-card-title>Также рекомендуем к просмотру</v-card-title>
       </v-card>
     </v-row>
-    <v-row class="flex" align="center">
+    <v-row align="center" justify="center" class="pa-0 ma-0">
       <v-col cols="3" v-for="rec in similars" :film="rec" :key="rec.filmId">
         <v-hover>
           <template v-slot:default="{ hover }">
@@ -246,6 +264,28 @@ export default {
       ratedFilms: (state) => state.ratedFilms,
       savedFilmsObj: (state) => state.savedFilmsObj,
     }),
+    xsRating() {
+      switch (this.$vuetify.breakpoint.name) {
+        case "xs":
+          return true;
+        default:
+          return false;
+      }
+    },
+    ratingSize() {
+      switch (this.$vuetify.breakpoint.name) {
+        case "xs":
+          return 18;
+        case "sm":
+          return 22;
+        case "md":
+          return 28;
+        case "lg":
+          return 36;
+        case "xl":
+          return 42;
+      }
+    },
     rating: {
       get() {
         let idFilms = this.ratedFilms.map((id) => id.filmId);

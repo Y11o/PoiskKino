@@ -3,7 +3,7 @@
     <SavedPaginations />
     <SavedSearch />
     <FilterSheet v-if="showFilterSettings" />
-    <v-row class="flex" align="center">
+    <v-row align="center" justify="center" class="pa-0 ma-0">
       <Film v-for="film in savedFilmsObjOnPage" :film="film" :key="film.id" />
     </v-row>
     <FilmDialog />

@@ -4,7 +4,7 @@
       v-model="dialogVisible"
       @click:outside="hideFilmDialog"
       max-height="1200"
-      max-width="600"
+      max-width="800"
       overlay-color="secondary"
       overlay-opacity="0.25"
     >
@@ -128,13 +128,13 @@ export default {
     imgMaxHeight() {
       switch (this.$vuetify.breakpoint.name) {
         case "xs":
-          return 600;
+          return 400;
         case "sm":
           return 800;
         case "md":
-          return 1000;
+          return 900;
         case "lg":
-          return 1200;
+          return 1000;
         case "xl":
           return 1400;
       }
@@ -142,15 +142,15 @@ export default {
     imgMaxWidth() {
       switch (this.$vuetify.breakpoint.name) {
         case "xs":
-          return 300;
+          return 200;
         case "sm":
           return 400;
         case "md":
           return 600;
         case "lg":
-          return 800;
+          return 700;
         case "xl":
-          return 1000;
+          return 800;
       }
     },
     rating: {
