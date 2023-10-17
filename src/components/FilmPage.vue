@@ -123,17 +123,7 @@
             <v-col>
               <v-sheet class="mt-2" color="background">
                 Ваша оценка:
-                <v-rating
-                  empty-icon="mdi-star-outline"
-                  full-icon="mdi-star"
-                  half-icon="mdi-star-half-full"
-                  background-color="secondary"
-                  half-increments
-                  hover
-                  length="10"
-                  :size="ratingSize"
-                  v-model="rating"
-                ></v-rating>
+                <Rating />
               </v-sheet>
             </v-col>
           </v-row>
@@ -143,17 +133,7 @@
         <v-col>
           <v-sheet class="mt-2" color="background">
             Ваша оценка:
-            <v-rating
-              empty-icon="mdi-star-outline"
-              full-icon="mdi-star"
-              half-icon="mdi-star-half-full"
-              background-color="secondary"
-              half-increments
-              hover
-              length="10"
-              :size="ratingSize"
-              v-model="rating"
-            ></v-rating>
+            <Rating />
           </v-sheet>
         </v-col>
       </v-row>
@@ -184,7 +164,11 @@
 <script>
 import axios from "axios";
 import { mapState, mapActions, mapMutations } from "vuex";
+import Rating from "@/components/Rating.vue";
 export default {
+  components: {
+    Rating,
+  },
   created() {
     this.loadSavedFilmsObj();
     if (!this.showFilm.filmId) {
@@ -208,9 +192,7 @@ export default {
       deleteFromFavs: "deleteFromFavs",
     }),
     ...mapMutations("films", {
-      addToRated: "addToRated",
       setSaved: "setSaved",
-      setRated: "setRated",
       loadSaved: "loadSaved",
       loadRating: "loadRating",
       loadSavedFilmsObj: "loadSavedFilmsObj",
@@ -261,7 +243,6 @@ export default {
     ...mapState("films", {
       showFilm: (state) => state.showFilm,
       savedFilms: (state) => state.savedFilms,
-      ratedFilms: (state) => state.ratedFilms,
       savedFilmsObj: (state) => state.savedFilmsObj,
     }),
     xsRating() {
@@ -271,46 +252,6 @@ export default {
         default:
           return false;
       }
-    },
-    ratingSize() {
-      switch (this.$vuetify.breakpoint.name) {
-        case "xs":
-          return 18;
-        case "sm":
-          return 22;
-        case "md":
-          return 28;
-        case "lg":
-          return 36;
-        case "xl":
-          return 42;
-      }
-    },
-    rating: {
-      get() {
-        let idFilms = this.ratedFilms.map((id) => id.filmId);
-        if (idFilms.includes(this.film.kinopoiskId)) {
-          return this.ratedFilms[idFilms.indexOf(this.film.kinopoiskId)]
-            .userRating;
-        } else {
-          return Math.round(this.film.ratingKinopoisk * 2) / 2;
-        }
-      },
-      set(newValue) {
-        let newFilm = {
-          filmId: this.film.kinopoiskId,
-          userRating: newValue,
-        };
-        if (!this.savedFilmsObj.includes(this.showFilm)) {
-          let ratedAdd = {
-            film: this.showFilm,
-            saved: false,
-          };
-          this.saveInFavs(ratedAdd);
-        }
-        this.addToRated(newFilm);
-        this.setRated();
-      },
     },
   },
 };

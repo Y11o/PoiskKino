@@ -19,7 +19,11 @@
         </v-row>
         <v-card-text>
           <v-row justify="center">
-            <v-img :max-heigh="imgMaxHeight" :max-width="imgMaxWidth" :src="showFilm.posterUrl" />
+            <v-img
+              :max-heigh="imgMaxHeight"
+              :max-width="imgMaxWidth"
+              :src="showFilm.posterUrl"
+            />
           </v-row>
           <v-row justify="center" align="baseline">
             <v-col cols="4">
@@ -46,17 +50,7 @@
             </v-col>
           </v-row>
           <v-row justify="center" class="mu-6">
-            <v-rating
-              empty-icon="mdi-star-outline"
-              full-icon="mdi-star"
-              half-icon="mdi-star-half-full"
-              background-color="secondary"
-              half-increments
-              hover
-              length="10"
-              :size="ratingSize"
-              v-model="rating"
-            ></v-rating>
+            <Rating />
           </v-row>
           <v-row justify="center" class="ma-6">
             <v-btn rounded color="primary" dark @click="goToFilmPage">
@@ -71,14 +65,16 @@
 
 <script>
 import { mapActions, mapMutations, mapState } from "vuex";
+import Rating from "@/components/Rating.vue";
 
 export default {
+  components: {
+    Rating,
+  },
   methods: {
     ...mapMutations("films", {
       hideFilmDialog: "hideFilmDialog",
-      addToRated: "addToRated",
       setSaved: "setSaved",
-      setRated: "setRated",
     }),
     ...mapActions("films", {
       saveInFavs: "saveInFavs",
@@ -108,23 +104,8 @@ export default {
       dialogVisible: (state) => state.dialogVisible,
       showFilm: (state) => state.showFilm,
       savedFilms: (state) => state.savedFilms,
-      ratedFilms: (state) => state.ratedFilms,
       savedFilmsObj: (state) => state.savedFilmsObj,
     }),
-    ratingSize() {
-      switch (this.$vuetify.breakpoint.name) {
-        case "xs":
-          return 12;
-        case "sm":
-          return 14;
-        case "md":
-          return 20;
-        case "lg":
-          return 24;
-        case "xl":
-          return 28;
-      }
-    },
     imgMaxHeight() {
       switch (this.$vuetify.breakpoint.name) {
         case "xs":
@@ -152,32 +133,6 @@ export default {
         case "xl":
           return 800;
       }
-    },
-    rating: {
-      get() {
-        let idFilms = this.ratedFilms.map((id) => id.filmId);
-        if (idFilms.includes(this.showFilm.filmId)) {
-          return this.ratedFilms[idFilms.indexOf(this.showFilm.filmId)]
-            .userRating;
-        } else {
-          return Math.round(this.showFilm.rating * 2) / 2;
-        }
-      },
-      set(newValue) {
-        let newFilm = {
-          filmId: this.showFilm.filmId,
-          userRating: newValue,
-        };
-        if (!this.savedFilmsObj.includes(this.showFilm)) {
-          let ratedAdd = {
-            film: this.showFilm,
-            saved: false,
-          };
-          this.saveInFavs(ratedAdd);
-        }
-        this.addToRated(newFilm);
-        this.setRated();
-      },
     },
   },
 };
