@@ -4,13 +4,28 @@
       <v-toolbar-title class="flex text-center">
         <h2 class="white--text">POISK KINO</h2>
       </v-toolbar-title>
-      <v-btn icon v-if="accent === 0" @click="switchAccent()" class="white--text">
+      <v-btn
+        icon
+        v-if="accent === 0"
+        @click="switchAccent()"
+        class="white--text"
+      >
         <v-icon>mdi-brush</v-icon>
       </v-btn>
-      <v-btn icon v-if="accent === 1" @click="switchAccent()" class="white--text">
+      <v-btn
+        icon
+        v-if="accent === 1"
+        @click="switchAccent()"
+        class="white--text"
+      >
         <v-icon>mdi-palette</v-icon>
       </v-btn>
-      <v-btn icon v-if="accent === 2" @click="switchAccent()" class="white--text">
+      <v-btn
+        icon
+        v-if="accent === 2"
+        @click="switchAccent()"
+        class="white--text"
+      >
         <v-icon>mdi-invert-colors</v-icon>
       </v-btn>
       <v-btn icon v-if="!isDark" @click="toggleTheme()" class="white--text">
@@ -30,25 +45,34 @@
 </template>
 
 <script>
-import { mapState, mapMutations } from "vuex";
+import { mapState, mapMutations, mapActions } from "vuex";
 export default {
   computed: {
-    ...mapState("films", {
+    ...mapState("themes", {
       isDark: "isDark",
       accent: "accent",
     }),
   },
+  beforeUnmount() {
+    this.setLocalStoredTheme();
+  },
+  beforeMount() {
+    this.$vuetify.theme.dark = this.isDark;
+  },
   methods: {
     toggleTheme() {
       this.$vuetify.theme.dark = !this.$vuetify.theme.dark;
-      this.toggleStoreTheme();
+      this.toggleStoreTheme(!this.isDark);
+      this.setLocalStoredTheme();
     },
     switchAccent() {
       this.toggleAccent((this.accent + 1) % 3);
+      this.setLocalStoredTheme();
     },
-    ...mapMutations("films", {
+    ...mapMutations("themes", {
       toggleStoreTheme: "toggleStoreTheme",
       toggleAccent: "toggleAccent",
+      setLocalStoredTheme: "setLocalStoredTheme",
     }),
   },
 };

@@ -56,7 +56,7 @@
 </template>
 
 <script>
-import { mapActions, mapMutations, mapState } from "vuex";
+import { mapActions, mapMutations } from "vuex";
 
 export default {
   created() {
@@ -92,9 +92,6 @@ export default {
       this.setFilterSettings(filter);
       this.searchSavedFilms();
     },
-  },
-  computed: {
-    ...mapState("films", {}),
   },
 };
 </script>

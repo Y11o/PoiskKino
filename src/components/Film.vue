@@ -2,8 +2,8 @@
   <v-col cols="3" >
     <v-hover>
       <template v-slot:default="{ hover }">
-        <v-card height="100%" width="100%" @click="showMore">
-          <v-img :src="film.posterUrl" />
+        <v-card max-heigh="600" max-width="400" @click="showMore">
+          <v-img max-heigh="600" max-width="400" :src="film.posterUrl" />
           <v-fade-transition>
             <v-overlay v-if="hover" absolute color="secondary" z-index="3">
             </v-overlay>

@@ -7,15 +7,18 @@
 
 <script>
 import Navbar from "@/components/Navbar.vue";
-import { mapState } from "vuex";
+import { mapActions } from "vuex";
 export default {
   name: "App",
   components: {
     Navbar,
   },
-  computed: {
-    ...mapState("films", {
-      isDark: "isDark",
+  beforeMount() {
+    this.loadLocalStoredTheme();
+  },
+  methods: {
+    ...mapActions("themes", {
+      loadLocalStoredTheme: "loadLocalStoredTheme",
     }),
   },
 };

@@ -4,13 +4,13 @@
       v-model="dialogVisible"
       @click:outside="hideFilmDialog"
       max-height="1200"
-      max-width="800"
+      max-width="600"
       overlay-color="secondary"
       overlay-opacity="0.25"
     >
       <v-card color="background">
         <v-row justify="center">
-          <v-card-title v-if="showFilm.nameOriginal" class="primary">
+          <v-card-title v-if="showFilm.nameOriginal">
             {{ showFilm.nameOriginal }}
           </v-card-title>
           <v-card-title v-else>
@@ -19,12 +19,10 @@
         </v-row>
         <v-card-text>
           <v-row justify="center">
-            <v-col>
-              <v-img :src="showFilm.posterUrl" />
-            </v-col>
+            <v-img max-heigh="600" max-width="400" :src="showFilm.posterUrl" />
           </v-row>
           <v-row justify="center">
-            <v-col cols="2">
+            <v-col cols="3">
               Year: {{ showFilm.year }} Kinopoisk:
               {{ showFilm.rating }}
             </v-col>
@@ -56,7 +54,7 @@
               half-increments
               hover
               length="10"
-              size="28"
+              size="24"
               v-model="rating"
             ></v-rating>
           </v-row>
@@ -101,7 +99,6 @@ export default {
     goToFilmPage() {
       this.$router.push({
         path: "/film",
-        params: { filmId: this.showFilm.filmId },
         query: { id: this.showFilm.filmId },
       });
     },

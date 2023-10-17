@@ -1,6 +1,4 @@
 import axios from "axios";
-import colors from "vuetify/lib/util/colors";
-import Vuetify from "@/plugins/vuetify.js";
 
 export default {
   state: {
@@ -19,79 +17,8 @@ export default {
     filterSettings: {},
     savedKeyword: "",
     savedFilmsObjOnPage: [],
-    isDark: false,
-    accent: 0,
-    lightT: {},
-    darkT: {},
-  },
-  getters: {
-    getFilms: (state) => state.films,
-    getDialogVisible: (state) => state.dialogVisible,
-    getShowFilm: (state) => state.showFilm,
-    getCurrentPage: (state) => state.currentPage,
-    getTotalFilmListPages: (state) => state.totalFilmListPages,
   },
   mutations: {
-    toggleAccent(state, payload) {
-      state.accent = payload;
-      switch (state.accent) {
-        case 0:
-          state.lightT = {
-            background: colors.grey.lighten3,
-            surface: "#FF6633",
-            primary: colors.deepOrange,
-            secondary: "#FF9966",
-            error: colors.red.darken4,
-          };
-          state.darkT = {
-            background: colors.grey.darken4,
-            surface: colors.indigo.darken3,
-            primary: colors.indigo,
-            secondary: colors.indigo.lighten1,
-            error: colors.red.darken4,
-          };
-          break;
-        case 1:
-          state.lightT = {
-            background: colors.grey.lighten3,
-            surface: colors.indigo.darken3,
-            primary: colors.indigo,
-            secondary: colors.indigo.lighten1,
-            error: colors.red.darken4,
-          };
-          state.darkT = {
-            background: colors.grey.darken4,
-            surface: colors.indigo.darken3,
-            primary: colors.indigo,
-            secondary: colors.indigo.lighten1,
-            error: colors.red.darken4,
-          };
-          break;
-        case 2:
-          state.lightT = {
-            background: colors.grey.lighten3,
-            surface: "#FF6633",
-            primary: colors.deepOrange,
-            secondary: "#FF9966",
-            error: colors.red.darken4,
-          };
-          state.darkT = {
-            background: colors.grey.darken4,
-            surface: "#FF6633",
-            primary: colors.deepOrange,
-            secondary: "#FF9966",
-            error: colors.red.darken4,
-          };
-          break;
-        default:
-          break;
-      }
-      Vuetify.framework.theme.themes.dark = state.darkT;
-      Vuetify.framework.theme.themes.light = state.lightT;
-    },
-    toggleStoreTheme(state) {
-      state.isDark = !state.isDark;
-    },
     setFilms(state, response) {
       state.films = response;
     },
@@ -193,6 +120,14 @@ export default {
     },
     setRated(state) {
       localStorage.setItem("storedRating", JSON.stringify(state.ratedFilms));
+    },
+    localStoreShowFilm(state) {
+      localStorage.setItem("showFilm", JSON.stringify(state.showFilm));
+    },
+    loadShowFilmFromStore(state) {
+      if (localStorage.showFilm) {
+        state.showFilm = JSON.parse(localStorage.showFilm);
+      }
     },
   },
   actions: {
