@@ -1,9 +1,9 @@
 <template>
   <v-container fluid>
     <v-toolbar dark color="secondary" class="mb-1">
-      <v-row class="flex" align="center">
+      <v-row class="flex" align="center" justify="center">
         <v-spacer></v-spacer>
-        <v-col cols="3">
+        <v-col cols="8" sm="5">
           <v-text-field
             flat
             solo-inverted

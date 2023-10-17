@@ -19,10 +19,10 @@
         </v-row>
         <v-card-text>
           <v-row justify="center">
-            <v-img max-heigh="600" max-width="400" :src="showFilm.posterUrl" />
+            <v-img :max-heigh="imgMaxHeight" :max-width="imgMaxWidth" :src="showFilm.posterUrl" />
           </v-row>
-          <v-row justify="center">
-            <v-col cols="3">
+          <v-row justify="center" align="baseline">
+            <v-col cols="4">
               Year: {{ showFilm.year }} Kinopoisk:
               {{ showFilm.rating }}
             </v-col>
@@ -54,7 +54,7 @@
               half-increments
               hover
               length="10"
-              size="24"
+              :size="ratingSize"
               v-model="rating"
             ></v-rating>
           </v-row>
@@ -111,6 +111,48 @@ export default {
       ratedFilms: (state) => state.ratedFilms,
       savedFilmsObj: (state) => state.savedFilmsObj,
     }),
+    ratingSize() {
+      switch (this.$vuetify.breakpoint.name) {
+        case "xs":
+          return 12;
+        case "sm":
+          return 14;
+        case "md":
+          return 20;
+        case "lg":
+          return 24;
+        case "xl":
+          return 28;
+      }
+    },
+    imgMaxHeight() {
+      switch (this.$vuetify.breakpoint.name) {
+        case "xs":
+          return 600;
+        case "sm":
+          return 800;
+        case "md":
+          return 1000;
+        case "lg":
+          return 1200;
+        case "xl":
+          return 1400;
+      }
+    },
+    imgMaxWidth() {
+      switch (this.$vuetify.breakpoint.name) {
+        case "xs":
+          return 300;
+        case "sm":
+          return 400;
+        case "md":
+          return 600;
+        case "lg":
+          return 800;
+        case "xl":
+          return 1000;
+      }
+    },
     rating: {
       get() {
         let idFilms = this.ratedFilms.map((id) => id.filmId);

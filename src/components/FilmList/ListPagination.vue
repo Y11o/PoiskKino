@@ -1,7 +1,7 @@
 <template>
   <v-container fluid>
-    <v-toolbar class="mb-1 elevation-0 pa-0 background" >
-      <v-row>
+    <v-toolbar class="mb-1 elevation-0 pa-0 background">
+      <v-row no-gutters class="flex" justify="center">
         <v-col cols="12">
           <v-pagination
             v-model="pageSelected"
@@ -9,7 +9,7 @@
             navigation-color="surface"
             color="secondary"
             :length="totalFilmListPages"
-            :total-visible="Math.ceil(totalFilmListPages / 2) + 1"
+            :total-visible="paginationVisible"
             circle
           ></v-pagination>
         </v-col>
@@ -26,6 +26,14 @@ export default {
       currentPage: (state) => state.currentPage,
       totalFilmListPages: (state) => state.totalFilmListPages,
     }),
+    paginationVisible() {
+      switch (this.$vuetify.breakpoint.name) {
+        case "xs":
+          return Math.ceil(this.totalFilmListPages / 4) + 1;
+        default:
+          return Math.ceil(this.totalFilmListPages / 2) + 1;
+      }
+    },
     pageSelected: {
       get() {
         return this.currentPage;

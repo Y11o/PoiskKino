@@ -2,7 +2,7 @@
   <v-container fluid>
     <ListPagination />
     <ListKeyWord />
-    <v-row class="flex" align="center">
+    <v-row class="flex" align="center" justify="center">
       <Film v-for="film in films" :film="film" :key="film.id" />
     </v-row>
     <FilmDialog />
