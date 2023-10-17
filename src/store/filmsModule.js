@@ -298,6 +298,15 @@ export default {
             break;
         }
       }
+      if (filterParams.sortBy === "Только в закладках") {
+        films = films.filter((element) =>
+          context.state.savedFilms.includes(element.filmId)
+        );
+      }
+      if (filterParams.sortBy === "Только с моей оценкой") {
+        let ratedId = context.state.ratedFilms.map((film) => film.filmId);
+        films = films.filter((element) => ratedId.includes(element.filmId));
+      }
       context.commit(
         "setTotalSavedFilmsListPages",
         Math.ceil(films.length / 20)
