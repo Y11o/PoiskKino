@@ -15,7 +15,13 @@ export default {
     ratedFilms: [],
     savedFilmsObj: [],
     showFilterSettings: false,
-    filterSettings: {},
+    filterSettings: {
+      filterByCountry: "",
+      filterByGenre: "",
+      sortBy: "sortByKPRating",
+      sortDesc: false,
+      showOnly: "Все",
+    },
     savedKeyword: "",
     savedFilmsObjOnPage: [],
     chronoSort: 0,
@@ -170,127 +176,13 @@ export default {
       context.commit("deleteFromSaved", payload.filmId);
     },
 
-    filterSavedFilms(context, films) {
+    async filterSavedFilms(context, films) {
+      films = await context.dispatch("filterByCountryAndGenre", films);
       let filterParams = context.state.filterSettings;
-      if (
-        !(
-          filterParams.filterByCountry === "" ||
-          filterParams.filterByCountry === null ||
-          filterParams.filterByCountry === undefined ||
-          filterParams.filterByCountry === " "
-        )
-      ) {
-        films = films.filter((element) =>
-          element.countries
-            .map((id) => (id.country || "").toLowerCase())
-            .includes(filterParams.filterByCountry.toLowerCase())
-        );
-      }
-      if (
-        !(
-          filterParams.filterByGenre === "" ||
-          filterParams.filterByGenre === null ||
-          filterParams.filterByGenre === undefined ||
-          filterParams.filterByGenre === " "
-        )
-      ) {
-        films = films.filter((element) =>
-          element.genres
-            .map((id) => (id.genre || "").toLowerCase())
-            .includes(filterParams.filterByGenre.toLowerCase())
-        );
-      }
       if (filterParams.sortDesc) {
-        switch (filterParams.sortBy) {
-          case "Названию":
-            films = films.sort((first, second) => {
-              let nameA = (first.nameEn || "").toUpperCase();
-              let nameB = (second.nameEn || "").toUpperCase();
-              if (nameA < nameB) {
-                return -1;
-              }
-              if (nameA > nameB) {
-                return 1;
-              }
-              return 0;
-            });
-            break;
-          case "Году":
-            films = films.sort(
-              (first, second) =>
-                parseInt(first.year || 0) - parseInt(second.year || 0)
-            );
-            break;
-          case "Хронометражу":
-            films = films.sort((first, second) => {
-              context.commit("setChronoSort", first.filmLength);
-              let dateFirst = context.state.chronoSort;
-              context.commit("setChronoSort", second.filmLength);
-              let dateSecond = context.state.chronoSort;
-              if (dateFirst < dateSecond) {
-                context.state.chronoSort = [];
-                return -1;
-              }
-              if (dateFirst > dateSecond) {
-                context.state.chronoSort = [];
-                return 1;
-              }
-              context.state.chronoSort = [];
-              return 0;
-            });
-            break;
-          default:
-            films = films.sort(
-              (first, second) =>
-                (parseFloat(first.rating.replace(",", ".")) || 0) -
-                (parseFloat(second.rating.replace(",", ".")) || 0)
-            );
-            break;
-        }
+        films = await context.dispatch(filterParams.sortBy + "Desc", films);
       } else {
-        switch (filterParams.sortBy) {
-          case "Названию":
-            films = films.sort((first, second) => {
-              let nameA = (first.nameEn || "").toUpperCase();
-              let nameB = (second.nameEn || "").toUpperCase();
-              if (nameA < nameB) {
-                return 1;
-              }
-              if (nameA > nameB) {
-                return -1;
-              }
-              return 0;
-            });
-            break;
-          case "Году":
-            films = films.sort(
-              (first, second) =>
-                parseInt(second.year || 0) - parseInt(first.year || 0)
-            );
-            break;
-          case "Хронометражу":
-            films = films.sort((first, second) => {
-              context.commit("setChronoSort", first.filmLength);
-              let dateFirst = context.state.chronoSort;
-              context.commit("setChronoSort", second.filmLength);
-              let dateSecond = context.state.chronoSort;
-              if (dateFirst < dateSecond) {
-                return 1;
-              }
-              if (dateFirst > dateSecond) {
-                return -1;
-              }
-              return 0;
-            });
-            break;
-          default:
-            films = films.sort(
-              (first, second) =>
-                (parseFloat(second.rating.replace(",", ".")) || 0) -
-                (parseFloat(first.rating.replace(",", ".")) || 0)
-            );
-            break;
-        }
+        films = await context.dispatch(filterParams.sortBy + "Asc", films);
       }
       if (filterParams.showOnly === "Только в закладках") {
         films = films.filter((element) =>
@@ -395,6 +287,134 @@ export default {
         }
         context.commit("setFilms", response.data.films);
       }
+    },
+
+    //Сортировки
+    async sortByNameAsc(context, films) {
+      return films.sort((first, second) => {
+        let nameA = (first.nameEn || "").toUpperCase();
+        let nameB = (second.nameEn || "").toUpperCase();
+        if (nameA < nameB) {
+          return 1;
+        }
+        if (nameA > nameB) {
+          return -1;
+        }
+        return 0;
+      });
+    },
+
+    async sortByYearAsc(context, films) {
+      return films.sort(
+        (first, second) =>
+          parseInt(second.year || 0) - parseInt(first.year || 0)
+      );
+    },
+
+    async sortByChronoAsc(context, films) {
+      return films.sort((first, second) => {
+        context.commit("setChronoSort", first.filmLength);
+        let dateFirst = context.state.chronoSort;
+        context.commit("setChronoSort", second.filmLength);
+        let dateSecond = context.state.chronoSort;
+        if (dateFirst < dateSecond) {
+          return 1;
+        }
+        if (dateFirst > dateSecond) {
+          return -1;
+        }
+        return 0;
+      });
+    },
+
+    async sortByKPRatingAsc(context, films) {
+      return films.sort(
+        (first, second) =>
+          (parseFloat(second.rating.replace(",", ".")) || 0) -
+          (parseFloat(first.rating.replace(",", ".")) || 0)
+      );
+    },
+
+    async sortByKPRatingDesc(context, films) {
+      return films.sort(
+        (first, second) =>
+          (parseFloat(first.rating.replace(",", ".")) || 0) -
+          (parseFloat(second.rating.replace(",", ".")) || 0)
+      );
+    },
+
+    async sortByChronoDesc(context, films) {
+      return films.sort((first, second) => {
+        context.commit("setChronoSort", first.filmLength);
+        let dateFirst = context.state.chronoSort;
+        context.commit("setChronoSort", second.filmLength);
+        let dateSecond = context.state.chronoSort;
+        if (dateFirst < dateSecond) {
+          context.state.chronoSort = [];
+          return -1;
+        }
+        if (dateFirst > dateSecond) {
+          context.state.chronoSort = [];
+          return 1;
+        }
+        context.state.chronoSort = [];
+        return 0;
+      });
+    },
+
+    async sortByYearDesc(context, films) {
+      return films.sort(
+        (first, second) =>
+          parseInt(first.year || 0) - parseInt(second.year || 0)
+      );
+    },
+
+    async sortByNameDesc(context, films) {
+      return films.sort((first, second) => {
+        let nameA = (first.nameEn || "").toUpperCase();
+        let nameB = (second.nameEn || "").toUpperCase();
+        if (nameA < nameB) {
+          return -1;
+        }
+        if (nameA > nameB) {
+          return 1;
+        }
+        return 0;
+      });
+    },
+
+    //Фильтрация по странам и жанрам
+    async filterByCountryAndGenre(context, films) {
+      let filterParams = context.state.filterSettings;
+      if (
+        !(
+          filterParams.filterByCountry === "" ||
+          filterParams.filterByCountry === null ||
+          filterParams.filterByCountry === undefined ||
+          filterParams.filterByCountry === " "
+        )
+      ) {
+        return films.filter((element) =>
+          element.countries
+            .map((id) => (id.country || "").toLowerCase())
+            .includes(filterParams.filterByCountry.toLowerCase())
+        );
+      }
+      if (
+        !(
+          filterParams.filterByGenre === "" ||
+          filterParams.filterByGenre === null ||
+          filterParams.filterByGenre === undefined ||
+          filterParams.filterByGenre === " "
+        )
+      ) {
+        return films.filter((element) =>
+          element.genres
+            .map((id) => (id.genre || "").toLowerCase())
+            .includes(filterParams.filterByGenre.toLowerCase())
+        );
+      }
+      return films;
     },
   },
   namespaced: true,

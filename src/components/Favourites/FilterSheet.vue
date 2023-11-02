@@ -39,7 +39,7 @@
               hide-details
               :items="showOnlyKeys"
               prepend-inner-icon="mdi-magnify"
-              label="Sort by"
+              label="Show"
             />
           </v-col>
           <v-col md="3" v-if="countSize">
@@ -52,15 +52,12 @@
               hide-details
               :items="sortKeys"
               prepend-inner-icon="mdi-magnify"
-              label="Sort by"
+              item-text="name"
+              return-object
             />
           </v-col>
           <v-col md="2" v-if="countSize">
-            <v-btn-toggle
-              v-model="sortDesc"
-              @change="setFilter()"
-              mandatory
-            >
+            <v-btn-toggle v-model="sortDesc" @change="setFilter()" mandatory>
               <v-btn large depressed color="surface" :value="false">
                 <v-icon>mdi-arrow-up</v-icon>
               </v-btn>
@@ -85,7 +82,7 @@
               hide-details
               :items="showOnlyKeys"
               prepend-inner-icon="mdi-magnify"
-              label="Sort by"
+              label="Show"
             />
           </v-col>
           <v-col cols="4">
@@ -98,15 +95,12 @@
               hide-details
               :items="sortKeys"
               prepend-inner-icon="mdi-magnify"
-              label="Sort by"
+              item-text="name"
+              return-object
             />
           </v-col>
           <v-col cols="4">
-            <v-btn-toggle
-              v-model="sortDesc"
-              @change="setFilter()"
-              mandatory
-            >
+            <v-btn-toggle v-model="sortDesc" @change="setFilter()" mandatory>
               <v-btn depressed color="surface" :value="false">
                 <v-icon>mdi-arrow-up</v-icon>
               </v-btn>
@@ -129,27 +123,24 @@ export default {
     let filter = {
       filterByCountry: this.filterByCountry,
       filterByGenre: this.filterByGenre,
-      sortBy: this.sortBy,
+      sortBy: this.sortBy.sortFunc,
       sortDesc: this.sortDesc,
+      showOnly: this.showOnly,
     };
     this.setFilterSettings(filter);
   },
   data: () => ({
     filterByCountry: "",
     filterByGenre: "",
-    sortBy: "Рейтингу Кинопоиска",
+    sortBy: { name: "Рейтингу Кинопоиска", sortFunc: "sortByKPRating" },
     sortKeys: [
-      "Названию",
-      "Году",
-      "Рейтингу Кинопоиска",
-      "Хронометражу",
+      { name: "Названию", sortFunc: "sortByName" },
+      { name: "Году", sortFunc: "sortByYear" },
+      { name: "Хронометражу", sortFunc: "sortByChrono" },
+      { name: "Рейтингу Кинопоиска", sortFunc: "sortByKPRating" },
     ],
     showOnly: "Все",
-    showOnlyKeys: [
-      "Все",
-      "Только в закладках",
-      "Только с моей оценкой",
-    ],
+    showOnlyKeys: ["Все", "Только в закладках", "Только с моей оценкой"],
     sortDesc: false,
   }),
   computed: {
@@ -179,7 +170,7 @@ export default {
       let filter = {
         filterByCountry: this.filterByCountry,
         filterByGenre: this.filterByGenre,
-        sortBy: this.sortBy,
+        sortBy: this.sortBy.sortFunc,
         sortDesc: this.sortDesc,
         showOnly: this.showOnly,
       };
