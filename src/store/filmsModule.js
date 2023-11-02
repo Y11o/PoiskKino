@@ -93,7 +93,8 @@ export default {
       }
     },
     addToSaved(state, payload) {
-      if (!state.savedFilms.includes(payload)) {
+      let savedIdList = state.savedFilms.map((id) => id.filmId);
+      if (!savedIdList.includes(payload.filmId)) {
         state.savedFilms.push(payload);
       }
     },
@@ -144,9 +145,13 @@ export default {
       ).valueOf();
     },
   },
+
   actions: {
     saveInFavs(context, payload) {
-      if (!context.state.savedFilmsObj.includes(payload.film)) {
+      let savedFilmsOnjIdList = context.state.savedFilmsObj.map(
+        (id) => id.filmId
+      );
+      if (!savedFilmsOnjIdList.includes(payload.film.filmId)) {
         context.state.savedFilmsObj.push(payload.film);
         context.commit("setSavedObj");
       }

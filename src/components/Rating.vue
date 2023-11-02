@@ -64,7 +64,8 @@ export default {
           filmId: this.showFilm.filmId,
           userRating: newValue,
         };
-        if (!this.savedFilmsObj.includes(this.showFilm)) {
+        let ratedSavedFilmsOnjIdList = this.savedFilmsObj.map((id) => id.filmId);
+        if (!ratedSavedFilmsOnjIdList.includes(this.showFilm.filmId,)) {
           let ratedAdd = {
             film: this.showFilm,
             saved: false,
