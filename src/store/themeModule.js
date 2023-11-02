@@ -5,63 +5,54 @@ export default {
   state: {
     localStoredTheme: {},
     isDark: false,
-    accent: 0,
+    currAccent: 0,
+    accentList: ["Switch on theme", "Indigo", "Peach"],
     lightT: {},
     darkT: {},
+    peachLightAccent: {
+      background: colors.grey.lighten3,
+      surface: "#FF6633",
+      primary: colors.deepOrange,
+      secondary: "#FF9966",
+      error: colors.red.darken4,
+    },
+    peachDarkAccent: {
+      background: colors.grey.darken4,
+      surface: "#FF6633",
+      primary: colors.deepOrange,
+      secondary: "#FF9966",
+      error: colors.red.darken4,
+    },
+    indigoLightAccent: {
+      background: colors.grey.lighten3,
+      surface: colors.indigo.darken3,
+      primary: colors.indigo,
+      secondary: colors.indigo.lighten1,
+      error: colors.red.darken4,
+    },
+    indigoDarkAccent: {
+      background: colors.grey.darken4,
+      surface: colors.indigo.darken3,
+      primary: colors.indigo,
+      secondary: colors.indigo.lighten1,
+      error: colors.red.darken4,
+    },
   },
   mutations: {
     toggleAccent(state, payload) {
-      state.accent = payload;
-      switch (state.accent) {
-        case 0:
-          state.lightT = {
-            background: colors.grey.lighten3,
-            surface: "#FF6633",
-            primary: colors.deepOrange,
-            secondary: "#FF9966",
-            error: colors.red.darken4,
-          };
-          state.darkT = {
-            background: colors.grey.darken4,
-            surface: colors.indigo.darken3,
-            primary: colors.indigo,
-            secondary: colors.indigo.lighten1,
-            error: colors.red.darken4,
-          };
+      state.currAccent = payload;
+      switch (state.accentList[state.currAccent]) {
+        case "Switch on theme":
+          state.lightT = state.peachLightAccent;
+          state.darkT = state.indigoDarkAccent;
           break;
-        case 1:
-          state.lightT = {
-            background: colors.grey.lighten3,
-            surface: colors.indigo.darken3,
-            primary: colors.indigo,
-            secondary: colors.indigo.lighten1,
-            error: colors.red.darken4,
-          };
-          state.darkT = {
-            background: colors.grey.darken4,
-            surface: colors.indigo.darken3,
-            primary: colors.indigo,
-            secondary: colors.indigo.lighten1,
-            error: colors.red.darken4,
-          };
+        case "Indigo":
+          state.lightT = state.indigoLightAccent;
+          state.darkT = state.indigoDarkAccent;
           break;
-        case 2:
-          state.lightT = {
-            background: colors.grey.lighten3,
-            surface: "#FF6633",
-            primary: colors.deepOrange,
-            secondary: "#FF9966",
-            error: colors.red.darken4,
-          };
-          state.darkT = {
-            background: colors.grey.darken4,
-            surface: "#FF6633",
-            primary: colors.deepOrange,
-            secondary: "#FF9966",
-            error: colors.red.darken4,
-          };
-          break;
-        default:
+        case "Peach":
+          state.lightT = state.peachLightAccent;
+          state.darkT = state.peachDarkAccent;
           break;
       }
       Vuetify.framework.theme.themes.dark = state.darkT;
@@ -72,7 +63,7 @@ export default {
     },
     setLocalStoredTheme(state) {
       state.localStoredTheme = {
-        accent: state.accent,
+        currAccent: state.currAccent,
         isDark: state.isDark,
       };
       localStorage.setItem(
@@ -85,9 +76,12 @@ export default {
     loadLocalStoredTheme(context) {
       if (localStorage.storedTheme) {
         context.state.localStoredTheme = JSON.parse(localStorage.storedTheme);
-        context.state.accent = context.state.localStoredTheme.accent;
+        context.state.currAccent = context.state.localStoredTheme.currAccent;
         context.state.isDark = context.state.localStoredTheme.isDark;
-        context.commit("toggleAccent", context.state.localStoredTheme.accent);
+        context.commit(
+          "toggleAccent",
+          context.state.localStoredTheme.currAccent
+        );
         context.commit(
           "toggleStoreTheme",
           context.state.localStoredTheme.isDark

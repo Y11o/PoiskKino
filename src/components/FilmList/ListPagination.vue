@@ -11,7 +11,7 @@
             :length="totalFilmListPages"
             :total-visible="paginationVisible"
             circle
-          ></v-pagination>
+          />
         </v-col>
       </v-row>
     </v-toolbar>

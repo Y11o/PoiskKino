@@ -14,7 +14,7 @@
               clearable
               prepend-inner-icon="mdi-magnify"
               label="Введите страну"
-            ></v-text-field>
+            />
           </v-col>
           <v-col cols="6" md="3">
             <v-text-field
@@ -27,7 +27,7 @@
               clearable
               prepend-inner-icon="mdi-magnify"
               label="Введите жанр"
-            ></v-text-field>
+            />
           </v-col>
           <v-col md="3" v-if="countSize">
             <v-select
@@ -40,13 +40,13 @@
               :items="sortKeys"
               prepend-inner-icon="mdi-magnify"
               label="Sort by"
-            ></v-select>
+            />
           </v-col>
           <v-col md="2" v-if="countSize">
             <v-btn-toggle
               v-model="sortDesc"
               @change="setFilter()"
-              @keydown.enter="setFilter()"
+              mandatory
             >
               <v-btn large depressed color="surface" :value="false">
                 <v-icon>mdi-arrow-up</v-icon>
@@ -73,13 +73,13 @@
               :items="sortKeys"
               prepend-inner-icon="mdi-magnify"
               label="Sort by"
-            ></v-select>
+            />
           </v-col>
           <v-col cols="6" md="3">
             <v-btn-toggle
               v-model="sortDesc"
               @change="setFilter()"
-              @keydown.enter="setFilter()"
+              mandatory
             >
               <v-btn depressed color="surface" :value="false">
                 <v-icon>mdi-arrow-up</v-icon>
@@ -112,7 +112,14 @@ export default {
     filterByCountry: "",
     filterByGenre: "",
     sortBy: "Рейтингу Кинопоиска",
-    sortKeys: ["Названию", "Году", "Рейтингу Кинопоиска", "Хронометражу", "Только в закладках", "Только с моей оценкой"],
+    sortKeys: [
+      "Названию",
+      "Году",
+      "Рейтингу Кинопоиска",
+      "Хронометражу",
+      "Только в закладках",
+      "Только с моей оценкой",
+    ],
     sortDesc: false,
   }),
   computed: {

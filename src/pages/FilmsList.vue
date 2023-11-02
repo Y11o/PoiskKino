@@ -32,9 +32,12 @@ export default {
     ListKeyWord,
   },
   created() {
-    this.fetchFilms();  //Запрос к API с фильмами
-    this.loadSaved();   //Загрузка избранных из localStorage
-    this.loadRating();  //Загрузка оцененных из localStorage
+    //Запрос к API с фильмами
+    this.fetchFilms();  
+    //Загрузка избранных из localStorage
+    this.loadSaved();   
+    //Загрузка оцененных из localStorage
+    this.loadRating();  
   },
   methods: {
     ...mapActions("films", {

@@ -36,10 +36,14 @@ export default {
     SavedSearch,
   },
   created() {
-    this.loadSavedFilmsObj(); //Загрузка оцененных и сохранненых объектов фильмов из localStorage
-    this.loadSaved();         //Загрузка сохранненых фильмов из localStorage
-    this.loadRating();        //Загрузка оцененных фильмов из localStorage
-    this.searchSavedFilms();  //Загрузка оцененных и сохранненых объектов фильмов из localStorage
+    //Загрузка оцененных и сохранненых объектов фильмов из localStorage
+    this.loadSavedFilmsObj(); 
+    //Загрузка сохранненых фильмов из localStorage
+    this.loadSaved();         
+    //Загрузка оцененных фильмов из localStorage
+    this.loadRating();        
+    //Поиск и сортировка сохраненных фильмов по параметрам
+    this.searchSavedFilms();  
   },
   methods: {
     ...mapActions("films", {

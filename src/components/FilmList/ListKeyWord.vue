@@ -2,7 +2,7 @@
   <v-container fluid>
     <v-toolbar dark color="secondary" class="mb-1">
       <v-row class="flex" align="center" justify="center">
-        <v-spacer></v-spacer>
+        <v-spacer />
         <v-col cols="8" sm="5">
           <v-text-field
             flat
@@ -13,7 +13,7 @@
             clearable
             @keydown.enter="findFilms()"
             @blur="findFilms()"
-          ></v-text-field>
+          />
         </v-col>
         <v-col>
           <v-btn icon @click="findFilms()">

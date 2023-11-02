@@ -6,7 +6,7 @@
       <v-sheet class="pa-0 ma-0" color="primary" v-if="!adaptiveSizing">
         <v-btn
           icon
-          v-if="accent === 0"
+          v-if="accentList[currAccent] === 'Switch on theme'"
           @click="switchAccent()"
           class="white--text"
         >
@@ -14,7 +14,7 @@
         </v-btn>
         <v-btn
           icon
-          v-if="accent === 1"
+          v-if="accentList[currAccent] === 'Indigo'"
           @click="switchAccent()"
           class="white--text"
         >
@@ -22,7 +22,7 @@
         </v-btn>
         <v-btn
           icon
-          v-if="accent === 2"
+          v-if="accentList[currAccent] === 'Peach'"
           @click="switchAccent()"
           class="white--text"
         >
@@ -41,7 +41,7 @@
       <v-sheet class="pa-0 ma-0" color="primary" v-if="adaptiveSizing">
         <v-btn
           icon
-          v-if="accent === 0"
+          v-if="accentList[currAccent] === 'Switch on theme'"
           @click="switchAccent()"
           class="white--text"
         >
@@ -49,7 +49,7 @@
         </v-btn>
         <v-btn
           icon
-          v-if="accent === 1"
+          v-if="accentList[currAccent] === 'Indigo'"
           @click="switchAccent()"
           class="white--text"
         >
@@ -57,7 +57,7 @@
         </v-btn>
         <v-btn
           icon
-          v-if="accent === 2"
+          v-if="accentList[currAccent] === 'Peach'"
           @click="switchAccent()"
           class="white--text"
         >
@@ -90,9 +90,11 @@ export default {
   computed: {
     ...mapState("themes", {
       isDark: "isDark",
-      accent: "accent",
+      currAccent: "currAccent",
+      accentList: "accentList",
     }),
-    adaptiveSizing() {  //Проверка размеров устройства
+    //Проверка размеров устройства
+    adaptiveSizing() {  
       switch (this.$vuetify.breakpoint.name) {
         case "xs":
           return false;
@@ -107,20 +109,24 @@ export default {
       }
     },
   },
-  beforeUnmount() {   //Перед закрытием сохраняются настройки темы и акцента сайта в localStorage
+  //Перед закрытием сохраняются настройки темы и акцента сайта в localStorage
+  beforeUnmount() {   
     this.setLocalStoredTheme();
   },
-  beforeMount() {     //Установка темы при загрузке сайта (данные из localStorage уже загружены во Vuex)
+  //Установка темы при загрузке сайта (данные из localStorage уже загружены во Vuex)
+  beforeMount() {     
     this.$vuetify.theme.dark = this.isDark;
   },
   methods: {
-    toggleTheme() { //Смена темы сайта
+    //Смена темы сайта
+    toggleTheme() { 
       this.$vuetify.theme.dark = !this.$vuetify.theme.dark;
       this.toggleStoreTheme(!this.isDark);
       this.setLocalStoredTheme();
     },
-    switchAccent() {  //Смена акцента сайта
-      this.toggleAccent((this.accent + 1) % 3);
+    //Смена акцента сайта
+    switchAccent() {  
+      this.toggleAccent((this.currAccent + 1) % this.accentList.length);
       this.setLocalStoredTheme();
     },
     ...mapMutations("themes", {

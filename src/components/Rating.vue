@@ -10,7 +10,7 @@
     length="10"
     :size="ratingSize"
     v-model="rating"
-  ></v-rating>
+  />
 </template>
 
 <script>
@@ -32,7 +32,8 @@ export default {
       ratedFilms: (state) => state.ratedFilms,
       savedFilmsObj: (state) => state.savedFilmsObj,
     }),
-    ratingSize() {    //Определение размеров пунктов рейтинга в зависимости от размеров устройства
+    //Определение размеров пунктов рейтинга в зависимости от размеров устройства
+    ratingSize() {
       switch (this.$vuetify.breakpoint.name) {
         case "xs":
           return 18;
@@ -47,8 +48,9 @@ export default {
       }
     },
     rating: {
-      get() {   //Если пользователь не оценил фильм, то отображается рейтинг Кинопоиска с точностью до 0.5 (пункт заполняется на половину)
-        let idFilms = this.ratedFilms.map((id) => id.filmId); 
+      //Если пользователь не оценил фильм, то отображается рейтинг Кинопоиска с точностью до 0.5 (пункт заполняется на половину)
+      get() {
+        let idFilms = this.ratedFilms.map((id) => id.filmId);
         if (idFilms.includes(this.showFilm.filmId)) {
           return this.ratedFilms[idFilms.indexOf(this.showFilm.filmId)]
             .userRating;
@@ -56,7 +58,8 @@ export default {
           return Math.round(this.showFilm.rating * 2) / 2;
         }
       },
-      set(newValue) {   //При оценке пользователем фильма
+      //При оценке пользователем фильма
+      set(newValue) {
         let newFilm = {
           filmId: this.showFilm.filmId,
           userRating: newValue,

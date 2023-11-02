@@ -11,7 +11,7 @@
             :length="totalSavedFilmsListPages"
             :total-visible="paginationVisible"
             circle
-          ></v-pagination>
+          />
         </v-col>
       </v-row>
     </v-toolbar>
@@ -35,7 +35,7 @@ export default {
       currentSavedFilmsPage: (state) => state.currentSavedFilmsPage,
       totalSavedFilmsListPages: (state) => state.totalSavedFilmsListPages,
     }),
-    paginationVisible(){
+    paginationVisible() {
       switch (this.$vuetify.breakpoint.name) {
         case "xs":
           return Math.ceil(this.totalSavedFilmsListPages / 4) + 1;

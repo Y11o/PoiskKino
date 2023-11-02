@@ -1,9 +1,11 @@
 <template>
   <v-app>
     <!-- Компонент навигации -->
-    <Navbar /> 
+    <Navbar />
     <!-- Содержание сайта -->
-    <v-main class="background"><router-view /></v-main>
+    <v-main class="background">
+      <router-view />
+    </v-main>
   </v-app>
 </template>
 
@@ -15,7 +17,8 @@ export default {
   components: {
     Navbar,
   },
-  beforeMount() { //Загрузка настроек темы из localStorage
+  beforeMount() {
+    //Загрузка настроек темы из localStorage
     this.loadLocalStoredTheme();
   },
   methods: {

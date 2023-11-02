@@ -1,6 +1,7 @@
 import axios from "axios";
 
-export default {    //Здесь описана логика работы с API, с сохраненными и оцененными фильмами
+export default {
+  //Здесь описана логика работы с API, с сохраненными и оцененными фильмами
   state: {
     films: [],
     dialogVisible: false,
@@ -17,6 +18,7 @@ export default {    //Здесь описана логика работы с API
     filterSettings: {},
     savedKeyword: "",
     savedFilmsObjOnPage: [],
+    chronoSort: 0,
   },
   mutations: {
     setFilms(state, response) {
@@ -71,7 +73,7 @@ export default {    //Здесь описана логика работы с API
         let savedFilmsObjFromStore = JSON.parse(localStorage.storedSavedObj);
         for (let elem = 0; elem < savedFilmsObjFromStore.length; elem++) {
           parsedFilms.push({});
-          const filmParsed = savedFilmsObjFromStore[elem];
+          let filmParsed = savedFilmsObjFromStore[elem];
           parsedFilms[elem] = { ...filmParsed };
         }
         state.totalSavedFilmsListPages = Math.ceil(parsedFilms.length / 20);
@@ -84,7 +86,7 @@ export default {    //Здесь описана логика работы с API
         let ratingFromStore = JSON.parse(localStorage.storedRating);
         for (let elem = 0; elem < ratingFromStore.length; elem++) {
           parsedFilms.push({});
-          const filmParsed = ratingFromStore[elem];
+          let filmParsed = ratingFromStore[elem];
           parsedFilms[elem] = { ...filmParsed };
         }
         state.ratedFilms = parsedFilms;
@@ -96,9 +98,9 @@ export default {    //Здесь описана логика работы с API
       }
     },
     addToRated(state, newFilm) {
-      let ratedId = state.ratedFilms.map((id) => id.filmId);
-      if (ratedId.includes(newFilm.filmId)) {
-        state.ratedFilms[ratedId.indexOf(newFilm.filmId)].userRating =
+      let ratedIdList = state.ratedFilms.map((id) => id.filmId);
+      if (ratedIdList.includes(newFilm.filmId)) {
+        state.ratedFilms[ratedIdList.indexOf(newFilm.filmId)].userRating =
           newFilm.userRating;
       } else {
         state.ratedFilms.push(newFilm);
@@ -129,6 +131,18 @@ export default {    //Здесь описана логика работы с API
         state.showFilm = JSON.parse(localStorage.showFilm);
       }
     },
+
+    setChronoSort(state, payload) {
+      let time = (payload + ":00").split(":");
+      state.chronoSort = new Date(
+        parseInt("2001", 10),
+        parseInt("01", 10) - 1,
+        parseInt("01", 10),
+        parseInt(time[0], 10),
+        parseInt(time[1], 10),
+        parseInt(time[2], 10)
+      ).valueOf();
+    },
   },
   actions: {
     saveInFavs(context, payload) {
@@ -141,8 +155,8 @@ export default {    //Здесь описана логика работы с API
       }
     },
     deleteFromFavs(context, payload) {
-      let ratedId = context.state.ratedFilms.map((id) => id.filmId);
-      if (!ratedId.includes(payload.filmId)) {
+      let ratedIdList = context.state.ratedFilms.map((id) => id.filmId);
+      if (!ratedIdList.includes(payload.filmId)) {
         context.state.savedFilmsObj = context.state.savedFilmsObj.filter(
           (element) => element !== payload
         );
@@ -185,8 +199,8 @@ export default {    //Здесь описана логика работы с API
         switch (filterParams.sortBy) {
           case "Названию":
             films = films.sort((first, second) => {
-              const nameA = (first.nameEn || "").toUpperCase();
-              const nameB = (second.nameEn || "").toUpperCase();
+              let nameA = (first.nameEn || "").toUpperCase();
+              let nameB = (second.nameEn || "").toUpperCase();
               if (nameA < nameB) {
                 return -1;
               }
@@ -204,30 +218,19 @@ export default {    //Здесь описана логика работы с API
             break;
           case "Хронометражу":
             films = films.sort((first, second) => {
-              const timeFirst = (first.filmLength + ":00").split(":");
-              const timeSecond = (second.filmLength + ":00").split(":");
-              const dateFirst = new Date(
-                parseInt("2001", 10),
-                parseInt("01", 10) - 1,
-                parseInt("01", 10),
-                parseInt(timeFirst[0], 10),
-                parseInt(timeFirst[1], 10),
-                parseInt(timeFirst[2], 10)
-              ).valueOf();
-              const dateSecond = new Date(
-                parseInt("2001", 10),
-                parseInt("01", 10) - 1,
-                parseInt("01", 10),
-                parseInt(timeSecond[0], 10),
-                parseInt(timeSecond[1], 10),
-                parseInt(timeSecond[2], 10)
-              ).valueOf();
+              context.commit("setChronoSort", first.filmLength);
+              let dateFirst = context.state.chronoSort;
+              context.commit("setChronoSort", second.filmLength);
+              let dateSecond = context.state.chronoSort;
               if (dateFirst < dateSecond) {
+                context.state.chronoSort = [];
                 return -1;
               }
               if (dateFirst > dateSecond) {
+                context.state.chronoSort = [];
                 return 1;
               }
+              context.state.chronoSort = [];
               return 0;
             });
             break;
@@ -243,8 +246,8 @@ export default {    //Здесь описана логика работы с API
         switch (filterParams.sortBy) {
           case "Названию":
             films = films.sort((first, second) => {
-              const nameA = (first.nameEn || "").toUpperCase();
-              const nameB = (second.nameEn || "").toUpperCase();
+              let nameA = (first.nameEn || "").toUpperCase();
+              let nameB = (second.nameEn || "").toUpperCase();
               if (nameA < nameB) {
                 return 1;
               }
@@ -262,24 +265,10 @@ export default {    //Здесь описана логика работы с API
             break;
           case "Хронометражу":
             films = films.sort((first, second) => {
-              const timeFirst = (first.filmLength + ":00").split(":");
-              const timeSecond = (second.filmLength + ":00").split(":");
-              const dateFirst = new Date(
-                parseInt("2001", 10),
-                parseInt("01", 10) - 1,
-                parseInt("01", 10),
-                parseInt(timeFirst[0], 10),
-                parseInt(timeFirst[1], 10),
-                parseInt(timeFirst[2], 10)
-              ).valueOf();
-              const dateSecond = new Date(
-                parseInt("2001", 10),
-                parseInt("01", 10) - 1,
-                parseInt("01", 10),
-                parseInt(timeSecond[0], 10),
-                parseInt(timeSecond[1], 10),
-                parseInt(timeSecond[2], 10)
-              ).valueOf();
+              context.commit("setChronoSort", first.filmLength);
+              let dateFirst = context.state.chronoSort;
+              context.commit("setChronoSort", second.filmLength);
+              let dateSecond = context.state.chronoSort;
               if (dateFirst < dateSecond) {
                 return 1;
               }
@@ -304,8 +293,8 @@ export default {    //Здесь описана логика работы с API
         );
       }
       if (filterParams.sortBy === "Только с моей оценкой") {
-        let ratedId = context.state.ratedFilms.map((film) => film.filmId);
-        films = films.filter((element) => ratedId.includes(element.filmId));
+        let ratedIdList = context.state.ratedFilms.map((film) => film.filmId);
+        films = films.filter((element) => ratedIdList.includes(element.filmId));
       }
       context.commit(
         "setTotalSavedFilmsListPages",
@@ -365,7 +354,8 @@ export default {    //Здесь описана логика работы с API
             params: {
               page: context.state.currentPage,
             },
-            headers: { //d3293c50-bae5-4091-9c53-23cab41ad74e
+            headers: {
+              //d3293c50-bae5-4091-9c53-23cab41ad74e
               "X-API-KEY": "5a083dfc-2af6-456d-bc14-2f6adbae7052",
               "Content-Type": "application/json",
             },
@@ -374,7 +364,7 @@ export default {    //Здесь описана логика работы с API
         context.commit("setTotalFilmListPages", response.data.pagesCount);
         context.commit("setFilms", response.data.films);
       } else {
-        const lastPage = context.state.currentPage;
+        let lastPage = context.state.currentPage;
         const response = await axios.get(
           "https://kinopoiskapiunofficial.tech/api/v2.1/films/search-by-keyword",
           {

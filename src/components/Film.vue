@@ -1,12 +1,11 @@
 <template>
-  <v-col cols="6" md="3" >
+  <v-col cols="6" md="3">
     <v-hover>
       <template v-slot:default="{ hover }">
         <v-card max-heigh="600" max-width="400" @click="showMore">
           <v-img max-heigh="600" max-width="400" :src="film.posterUrl" />
           <v-fade-transition>
-            <v-overlay v-if="hover" absolute color="secondary" z-index="3">
-            </v-overlay>
+            <v-overlay v-if="hover" absolute color="secondary" z-index="3" />
           </v-fade-transition>
         </v-card>
       </template>
