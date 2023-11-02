@@ -3,7 +3,7 @@
     <v-toolbar dark color="secondary" class="mb-1">
       <template>
         <v-row align="center" justify="center">
-          <v-col cols="6" md="4">
+          <v-col cols="6" md="3">
             <v-text-field
               v-model="filterByCountry"
               @change="setFilter()"
@@ -16,7 +16,7 @@
               label="Введите страну"
             />
           </v-col>
-          <v-col cols="6" md="3">
+          <v-col cols="6" md="2">
             <v-text-field
               v-model="filterByGenre"
               @change="setFilter()"
@@ -27,6 +27,19 @@
               clearable
               prepend-inner-icon="mdi-magnify"
               label="Введите жанр"
+            />
+          </v-col>
+          <v-col md="2" v-if="countSize">
+            <v-select
+              v-model="showOnly"
+              @keydown.enter="setFilter()"
+              @change="setFilter()"
+              flat
+              solo-inverted
+              hide-details
+              :items="showOnlyKeys"
+              prepend-inner-icon="mdi-magnify"
+              label="Sort by"
             />
           </v-col>
           <v-col md="3" v-if="countSize">
@@ -62,7 +75,20 @@
     <v-toolbar dark color="secondary" class="mb-1" v-if="!countSize">
       <template>
         <v-row class=".flex-sm-wrap" align="center" justify="center">
-          <v-col cols="6" md="4">
+          <v-col cols="4">
+            <v-select
+              v-model="showOnly"
+              @keydown.enter="setFilter()"
+              @change="setFilter()"
+              flat
+              solo-inverted
+              hide-details
+              :items="showOnlyKeys"
+              prepend-inner-icon="mdi-magnify"
+              label="Sort by"
+            />
+          </v-col>
+          <v-col cols="4">
             <v-select
               v-model="sortBy"
               @keydown.enter="setFilter()"
@@ -75,7 +101,7 @@
               label="Sort by"
             />
           </v-col>
-          <v-col cols="6" md="3">
+          <v-col cols="4">
             <v-btn-toggle
               v-model="sortDesc"
               @change="setFilter()"
@@ -120,6 +146,12 @@ export default {
       "Только в закладках",
       "Только с моей оценкой",
     ],
+    showOnly: "Все",
+    showOnlyKeys: [
+      "Все",
+      "Только в закладках",
+      "Только с моей оценкой",
+    ],
     sortDesc: false,
   }),
   computed: {
@@ -151,6 +183,7 @@ export default {
         filterByGenre: this.filterByGenre,
         sortBy: this.sortBy,
         sortDesc: this.sortDesc,
+        showOnly: this.showOnly,
       };
       this.setFilterSettings(filter);
       this.searchSavedFilms();

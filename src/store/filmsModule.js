@@ -287,12 +287,12 @@ export default {
             break;
         }
       }
-      if (filterParams.sortBy === "Только в закладках") {
+      if (filterParams.showOnly === "Только в закладках") {
         films = films.filter((element) =>
           context.state.savedFilms.includes(element.filmId)
         );
       }
-      if (filterParams.sortBy === "Только с моей оценкой") {
+      if (filterParams.showOnly === "Только с моей оценкой") {
         let ratedIdList = context.state.ratedFilms.map((film) => film.filmId);
         films = films.filter((element) => ratedIdList.includes(element.filmId));
       }
