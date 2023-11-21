@@ -100,7 +100,7 @@ export default {
     },
     addToSaved(state, payload) {
       let savedIdList = state.savedFilms.map((id) => id.filmId);
-      if (!savedIdList.includes(payload.filmId)) {
+      if (!savedIdList.includes(payload)) {
         state.savedFilms.push(payload);
       }
     },

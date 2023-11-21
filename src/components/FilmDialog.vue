@@ -93,6 +93,7 @@ export default {
       this.setSaved();
     },
     goToFilmPage() {
+      this.hideFilmDialog();
       this.$router.push({
         path: "/film",
         query: { id: this.showFilm.filmId },

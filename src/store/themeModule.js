@@ -1,5 +1,10 @@
-import colors from "vuetify/lib/util/colors";
 import Vuetify from "@/plugins/vuetify.js";
+import {
+  peachLightAccent,
+  peachDarkAccent,
+  indigoLightAccent,
+  indigoDarkAccent,
+} from "@/styles/accents/Accents.js";
 
 export default {
   state: {
@@ -9,37 +14,14 @@ export default {
     accentList: ["Switch on theme", "Indigo", "Peach"],
     lightT: {},
     darkT: {},
-    peachLightAccent: {
-      background: colors.grey.lighten3,
-      surface: "#FF6633",
-      primary: colors.deepOrange,
-      secondary: "#FF9966",
-      error: colors.red.darken4,
-    },
-    peachDarkAccent: {
-      background: colors.grey.darken4,
-      surface: "#FF6633",
-      primary: colors.deepOrange,
-      secondary: "#FF9966",
-      error: colors.red.darken4,
-    },
-    indigoLightAccent: {
-      background: colors.grey.lighten3,
-      surface: colors.indigo.darken3,
-      primary: colors.indigo,
-      secondary: colors.indigo.lighten1,
-      error: colors.red.darken4,
-    },
-    indigoDarkAccent: {
-      background: colors.grey.darken4,
-      surface: colors.indigo.darken3,
-      primary: colors.indigo,
-      secondary: colors.indigo.lighten1,
-      error: colors.red.darken4,
-    },
+    peachLightAccent: peachLightAccent,
+    peachDarkAccent: peachDarkAccent,
+    indigoLightAccent: indigoLightAccent,
+    indigoDarkAccent: indigoDarkAccent,
   },
   mutations: {
     toggleAccent(state, payload) {
+      console.log(peachLightAccent, peachDarkAccent, indigoLightAccent, indigoDarkAccent);
       state.currAccent = payload;
       switch (state.accentList[state.currAccent]) {
         case "Switch on theme":
